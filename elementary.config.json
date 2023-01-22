@@ -1,0 +1,16 @@
+{
+  "displayName": "Ditto",
+  "company": "bgins",
+  "bundleId": "com.bgins.ditto",
+  "version": "0.1.0",
+  "manufacturerCode": "bgins",
+  "pluginCode": "Ditto",
+  "numInputChannels": 2,
+  "numOutputChannels": 2,
+  "window": {
+    "width": 500,
+    "height": 350,
+    "showToolbar": false
+  },
+  "parameters": []
+}
