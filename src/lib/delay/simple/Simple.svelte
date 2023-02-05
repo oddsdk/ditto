@@ -3,7 +3,7 @@
 
   import { limits, process } from './simple.js'
   import { translateToRange } from '$lib/common/utils.js'
-  import Slider from '$lib/common/components/Slider.svelte'
+  import Knob from '$lib/common/components/Knob.svelte'
 
   export let input: Channels
   export let render: (channels: Channels) => void
@@ -35,9 +35,25 @@
     }
   }
 
-  const setParam = (
+  let selectedParam: keyof typeof params | null = null
+
+  function selectParam(event: CustomEvent<{ id: keyof typeof params }>) {
+    const { id } = event.detail
+
+    selectedParam = id
+  }
+
+  function unselectParam(event: CustomEvent<{ id: keyof typeof params }>) {
+    const { id } = event.detail
+
+    if (id === selectedParam) {
+      selectedParam = null
+    }
+  }
+
+  function setParam(
     event: CustomEvent<{ id: keyof typeof params; value: number }>
-  ) => {
+  ) {
     const { id, value } = event.detail
 
     switch (id) {
@@ -83,16 +99,18 @@
   <div class="grid justify-center">
     <h2 class="text-lg">Simple Delay</h2>
   </div>
-  <div class="grid grid-flow-row auto-rows-max gap-4">
+  <div class="grid grid-flow-col auto-cols-max gap-4">
     {#each Object.entries(params) as [id, param]}
-      <Slider
+      <Knob
         {id}
         label={param.label}
         value={param.value}
         min={param.min}
         max={param.max}
-        step={param.step}
         unitLabel={param.unitLabel}
+        selected={selectedParam === id}
+        on:mousedown={selectParam}
+        on:mouseup={unselectParam}
         on:input={setParam}
       />
     {/each}
