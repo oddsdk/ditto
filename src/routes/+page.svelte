@@ -2,13 +2,13 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
-  import type { Channels } from '$lib/index'
-  import Delay from '$lib/delay/Delay.svelte'
-  import CloseIcon from '$lib/icons/Close.svelte'
+  import type { Channels } from '$lib/audio/index'
+  import Controls from '$components/views/Controls.svelte'
+  import CloseIcon from '$components/icons/Close.svelte'
   import Connect from '$components/views/Connect.svelte'
-  import ConnectIcon from '$lib/icons/Connect.svelte'
+  import ConnectIcon from '$components/icons/Connect.svelte'
   import Presets from '$components/views/Presets.svelte'
-  import PresetsIcon from '$lib/icons/Presets.svelte'
+  import PresetsIcon from '$components/icons/Presets.svelte'
 
   type View = 'connect' | 'controls' | 'presets'
 
@@ -49,7 +49,7 @@
       {/if}
     </div>
     {#if view === 'controls'}
-      <Delay {input} {render} />
+      <Controls {input} {render} />
     {:else if view === 'connect'}
       <Connect />
     {:else if view === 'presets'}
