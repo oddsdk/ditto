@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Channels, Param } from '../index.js'
+  import type { Channels, Param } from '$lib/audio/index.js'
 
-  import { limits, process } from './delay.js'
-  import { translateToRange } from '$lib/common/utils.js'
-  import Knob from '$lib/common/components/Knob.svelte'
+  import { limits, process } from '$lib/audio/delay.js'
+  import { translateToRange } from '$lib/utils.js'
+  import Knob from '$components/controls/Knob.svelte'
 
   export let input: Channels
   export let render: (channels: Channels) => void

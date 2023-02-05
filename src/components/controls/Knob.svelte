@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { isOutMouseMove, mouseOutside } from '../actions/mouse-outside'
-  import { translateToRange } from '../utils'
+  import { isOutMouseMove, mouseOutside } from '$lib/actions/mouse-outside'
+  import { translateToRange } from '$lib/utils'
 
   export let id: string
   export let label: string

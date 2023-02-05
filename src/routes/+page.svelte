@@ -2,11 +2,18 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
-  import Delay from '$lib/delay/Delay.svelte'
+  import type { Channels } from '$lib/audio/index'
+  import Controls from '$components/views/Controls.svelte'
+  import CloseIcon from '$components/icons/Close.svelte'
+  import Connect from '$components/views/Connect.svelte'
+  import ConnectIcon from '$components/icons/Connect.svelte'
+  import Presets from '$components/views/Presets.svelte'
+  import PresetsIcon from '$components/icons/Presets.svelte'
 
-  import type { Channels } from '$lib/index'
+  type View = 'connect' | 'controls' | 'presets'
 
   let input: Channels
+  let view: View = 'controls'
 
   core.on('load', function () {
     input = {
@@ -20,13 +27,33 @@
   }
 
   core.initialize()
+
+  function setView(event: CustomEvent<{ view: View }>) {
+    view = event.detail.view
+  }
 </script>
 
 {#if input}
-  <div class="grid grid-flow-row auto-rows-max gap-5 px-10 py-5 justify-center">
-    <div class="grid justify-start pl-4">
+  <div class="grid grid-flow-row auto-rows-max gap-5 px-5 py-5">
+    <div class="grid grid-flow-col auto-cols w-full pl-4">
       <h2 class="text-2xl font-mono">Ditto</h2>
+      {#if view === 'controls'}
+        <div class="grid grid-flow-col auto-cols pt-1 pr-5 gap-5 justify-end">
+          <ConnectIcon on:click={setView} />
+          <PresetsIcon on:click={setView} />
+        </div>
+      {:else}
+        <div class="grid pt-1 pr-3 justify-end">
+          <CloseIcon on:click={setView} />
+        </div>
+      {/if}
     </div>
-    <Delay {input} {render} />
+    {#if view === 'controls'}
+      <Controls {input} {render} />
+    {:else if view === 'connect'}
+      <Connect />
+    {:else if view === 'presets'}
+      <Presets />
+    {/if}
   </div>
 {/if}
