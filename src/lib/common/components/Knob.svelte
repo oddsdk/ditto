@@ -109,7 +109,7 @@
   .control {
     position: relative;
     display: inline-block;
-    padding: 40px;
+    padding: 30px;
     border: 0;
     border-radius: 3px;
     background-color: #414141;
