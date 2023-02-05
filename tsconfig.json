@@ -4,12 +4,19 @@
     "outDir": "build",
     "allowJs": true,
     "checkJs": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "$components": ["src/components"],
+      "$components/*": ["src/components/*"],
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"]
+    }
   },
   "include": [
     "src/**/*.d.ts",

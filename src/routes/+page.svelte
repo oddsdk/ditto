@@ -5,9 +5,9 @@
   import type { Channels } from '$lib/index'
   import Delay from '$lib/delay/Delay.svelte'
   import CloseIcon from '$lib/icons/Close.svelte'
-  import Connect from '../components/views/Connect.svelte'
+  import Connect from '$components/views/Connect.svelte'
   import ConnectIcon from '$lib/icons/Connect.svelte'
-  import Presets from '../components/views/Presets.svelte'
+  import Presets from '$components/views/Presets.svelte'
   import PresetsIcon from '$lib/icons/Presets.svelte'
 
   type View = 'connect' | 'controls' | 'presets'
