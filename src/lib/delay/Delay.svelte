@@ -95,24 +95,19 @@
   }
 </script>
 
-<div class="grid grid-flow-row auto-rows-max gap-5 px-10 py-5">
-  <div class="grid justify-center">
-    <h2 class="text-lg">Simple Delay</h2>
-  </div>
-  <div class="grid grid-flow-col auto-cols-max gap-4">
-    {#each Object.entries(params) as [id, param]}
-      <Knob
-        {id}
-        label={param.label}
-        value={param.value}
-        min={param.min}
-        max={param.max}
-        unitLabel={param.unitLabel}
-        selected={selectedParam === id}
-        on:mousedown={selectParam}
-        on:mouseup={unselectParam}
-        on:input={setParam}
-      />
-    {/each}
-  </div>
+<div class="grid grid-flow-col auto-cols-max gap-2">
+  {#each Object.entries(params) as [id, param]}
+    <Knob
+      {id}
+      label={param.label}
+      value={param.value}
+      min={param.min}
+      max={param.max}
+      unitLabel={param.unitLabel}
+      selected={selectedParam === id}
+      on:mousedown={selectParam}
+      on:mouseup={unselectParam}
+      on:input={setParam}
+    />
+  {/each}
 </div>

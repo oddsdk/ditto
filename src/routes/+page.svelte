@@ -23,5 +23,10 @@
 </script>
 
 {#if input}
-  <Delay {input} {render} />
+  <div class="grid grid-flow-row auto-rows-max gap-5 px-10 py-5 justify-center">
+    <div class="grid justify-start pl-4">
+      <h2 class="text-2xl font-mono">Ditto</h2>
+    </div>
+    <Delay {input} {render} />
+  </div>
 {/if}
