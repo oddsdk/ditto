@@ -1,38 +1,23 @@
 <script lang="ts">
-  import type { Channels, Param } from '$lib/audio/index.js'
+  import { onDestroy } from 'svelte'
 
   import { limits, process } from '$lib/audio/delay.js'
+  import { presetStore } from '../../stores.js'
   import { translateToRange } from '$lib/utils.js'
+  import type { Channels, Preset } from '$lib/audio/index.js'
   import Knob from '$components/controls/Knob.svelte'
 
   export let input: Channels
   export let render: (channels: Channels) => void
 
-  const params: Record<string, Param> = {
-    delayTime: {
-      label: 'Time',
-      value: 200,
-      min: 0,
-      max: 1000,
-      unitLabel: 'ms'
-    },
-    feedback: {
-      label: 'Feedback',
-      value: 0,
-      min: 0,
-      max: 100,
-      unitLabel: '%'
-    },
-    mix: {
-      label: 'Mix',
-      value: 50,
-      min: 0,
-      max: 100,
-      unitLabel: '%'
-    }
-  }
-
+  let params: Preset
   let selectedParam: keyof typeof params | null = null
+
+  const unsubscribePresetStore = presetStore.subscribe(val => {
+    params = val
+  })
+
+  onDestroy(unsubscribePresetStore)
 
   function selectParam(event: CustomEvent<{ id: keyof typeof params }>) {
     const { id } = event.detail
@@ -66,6 +51,8 @@
         params.mix.value = value
         break
     }
+
+    presetStore.set(params)
   }
 
   $: {
