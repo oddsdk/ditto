@@ -1,5 +1,13 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+
   let strokeWidth = 1.5
+
+  const dispatch = createEventDispatcher()
+
+  function handleClick() {
+    dispatch('click', { view: 'connect' })
+  }
 </script>
 
 <svg
@@ -14,8 +22,10 @@
   stroke-linejoin="round"
   style:cursor="pointer"
   class="feather feather-link"
-  on:mouseenter={() => strokeWidth = 1.8}
-  on:mouseleave={() => strokeWidth = 1.5}
+  on:mouseenter={() => (strokeWidth = 1.8)}
+  on:mouseleave={() => (strokeWidth = 1.5)}
+  on:click={handleClick}
+  on:keydown={handleClick}
 >
   <title>Connect</title>
   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />

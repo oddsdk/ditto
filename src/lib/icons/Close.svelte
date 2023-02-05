@@ -6,7 +6,7 @@
   const dispatch = createEventDispatcher()
 
   function handleClick() {
-    dispatch('click', { view: 'presets' })
+    dispatch('click', { view: 'controls' })
   }
 </script>
 
@@ -27,13 +27,8 @@
   on:click={handleClick}
   on:keydown={handleClick}
 >
-  <title>Presets</title>
-  <line x1="8" y1="6" x2="21" y2="6" />
-  <line x1="8" y1="12" x2="21" y2="12" />
-  <line x1="8" y1="18" x2="21" y2="18" />
-  <line x1="3" y1="6" x2="3.01" y2="6" />
-  <line x1="3" y1="12" x2="3.01" y2="12" />
-  <line x1="3" y1="18" x2="3.01" y2="18" />
+  <line x1="18" y1="6" x2="6" y2="18" />
+  <line x1="6" y1="6" x2="18" y2="18" />
 </svg>
 
 <style>
@@ -41,3 +36,4 @@
     transition: stroke-width 0.2s ease-in-out;
   }
 </style>
+
