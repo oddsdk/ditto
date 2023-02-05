@@ -2,7 +2,7 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
-  import { Simple } from '$lib/delay'
+  import Delay from '$lib/delay/Delay.svelte'
 
   import type { Channels } from '$lib/index'
 
@@ -23,5 +23,5 @@
 </script>
 
 {#if input}
-  <Simple {input} {render} />
+  <Delay {input} {render} />
 {/if}

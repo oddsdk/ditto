@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Channels, Param } from '../../index.js'
+  import type { Channels, Param } from '../index.js'
 
-  import { limits, process } from './simple.js'
+  import { limits, process } from './delay.js'
   import { translateToRange } from '$lib/common/utils.js'
   import Knob from '$lib/common/components/Knob.svelte'
 
