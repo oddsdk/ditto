@@ -2,22 +2,44 @@
   import { onDestroy } from 'svelte'
 
   import { limits, process } from '$lib/audio/delay.js'
-  import { presetStore } from '../../stores.js'
-  import { translateToRange } from '$lib/utils.js'
-  import type { Channels, Preset } from '$lib/audio/index.js'
+  import { patchStore } from '../../stores.js'
+  import { objectEntries, translateToRange } from '$lib/utils.js'
+  import type { Channels, Params } from '$lib/audio'
+  import type { Patch } from '$lib/patch'
   import Knob from '$components/controls/Knob.svelte'
 
   export let input: Channels
   export let render: (channels: Channels) => void
 
-  let params: Preset
-  let selectedParam: keyof typeof params | null = null
+  let patch: Patch
+  let selectedParam: keyof Params | null = null
 
-  const unsubscribePresetStore = presetStore.subscribe(val => {
-    params = val
+  const params: Params = {
+    delayTime: {
+      label: 'Time',
+      min: 0,
+      max: 1000,
+      unitLabel: 'ms'
+    },
+    feedback: {
+      label: 'Feedback',
+      min: 0,
+      max: 100,
+      unitLabel: '%'
+    },
+    mix: {
+      label: 'Mix',
+      min: 0,
+      max: 100,
+      unitLabel: '%'
+    }
+  }
+
+  const unsubscribePatchStore = patchStore.subscribe(val => {
+    patch = val
   })
 
-  onDestroy(unsubscribePresetStore)
+  onDestroy(unsubscribePatchStore)
 
   function selectParam(event: CustomEvent<{ id: keyof typeof params }>) {
     const { id } = event.detail
@@ -40,30 +62,30 @@
 
     switch (id) {
       case 'delayTime':
-        params.delayTime.value = value
+        patch.params.delayTime = value
         break
 
       case 'feedback':
-        params.feedback.value = value
+        patch.params.feedback = value
         break
 
       case 'mix':
-        params.mix.value = value
+        patch.params.mix = value
         break
     }
 
-    presetStore.set(params)
+    patchStore.set(patch)
   }
 
   $: {
     const feedback = translateToRange({
-      num: params.feedback.value,
+      num: patch.params.feedback,
       original: { min: 0, max: 100 },
       scaled: { min: limits.feedback.min, max: limits.feedback.max }
     })
 
     const mix = translateToRange({
-      num: params.mix.value,
+      num: patch.params.mix,
       original: { min: 0, max: 100 },
       scaled: { min: limits.mix.min, max: limits.mix.max }
     })
@@ -71,7 +93,7 @@
     render(
       process({
         input,
-        delayTime: params.delayTime.value,
+        delayTime: patch.params.delayTime,
         feedback,
         mix
       })
@@ -80,11 +102,11 @@
 </script>
 
 <div class="grid grid-flow-col auto-cols-max gap-2">
-  {#each Object.entries(params) as [id, param]}
+  {#each objectEntries(params) as [id, param]}
     <Knob
       {id}
       label={param.label}
-      value={param.value}
+      value={patch.params[id]}
       min={param.min}
       max={param.max}
       unitLabel={param.unitLabel}

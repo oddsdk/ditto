@@ -1,28 +1,19 @@
 import { writable } from 'svelte/store'
 import type { Writable } from 'svelte/store'
 
-import type { Preset } from '$lib/audio'
+import { version } from '../package.json'
+import type { Patch } from '$lib/patch'
 
-export const presetStore: Writable<Preset> = writable({
-  delayTime: {
-    label: 'Time',
-    value: 200,
-    min: 0,
-    max: 1000,
-    unitLabel: 'ms'
+export const patchStore: Writable<Patch> = writable({
+  version,
+  id: 'default',
+  creator: 'bgins',
+  params: {
+    delayTime: 200,
+    feedback: 0,
+    mix: 50
   },
-  feedback: {
-    label: 'Feedback',
-    value: 0,
-    min: 0,
-    max: 100,
-    unitLabel: '%'
-  },
-  mix: {
-    label: 'Mix',
-    value: 50,
-    min: 0,
-    max: 100,
-    unitLabel: '%'
-  }
+  notes: '',
+  tags: [],
+  visibility: 'public'
 })

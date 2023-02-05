@@ -8,13 +8,12 @@ export type Limits = {
 
 type Param = {
   label: string
-  value: number
   min: number
   max: number
   unitLabel: string
 }
 
-export type Preset = {
+export type Params = {
   delayTime: Param
   feedback: Param
   mix: Param
