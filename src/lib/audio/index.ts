@@ -11,7 +11,5 @@ export type Param = {
   value: number
   min: number
   max: number
-  step: number
   unitLabel: string
-  hidden?: boolean
 }

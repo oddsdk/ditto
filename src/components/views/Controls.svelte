@@ -14,7 +14,6 @@
       value: 200,
       min: 0,
       max: 1000,
-      step: 1,
       unitLabel: 'ms'
     },
     feedback: {
@@ -22,7 +21,6 @@
       value: 0,
       min: 0,
       max: 100,
-      step: 1,
       unitLabel: '%'
     },
     mix: {
@@ -30,7 +28,6 @@
       value: 50,
       min: 0,
       max: 100,
-      step: 1,
       unitLabel: '%'
     }
   }
