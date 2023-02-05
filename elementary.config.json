@@ -8,8 +8,12 @@
   "numInputChannels": 2,
   "numOutputChannels": 2,
   "window": {
-    "width": 500,
-    "height": 350,
+    "width": 530,
+    "height": 300,
+    "minWidth": 530,
+    "minHeight": 300,
+    "maxWidth": 530,
+    "maxHeight": 300,
     "showToolbar": false
   },
   "parameters": []

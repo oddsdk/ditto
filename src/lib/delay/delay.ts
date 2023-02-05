@@ -1,6 +1,6 @@
 import { el } from '@elemaudio/core'
 
-import type { Channels, Limits } from '../../index.js'
+import type { Channels, Limits } from '../index.js'
 
 export const limits: Limits = {
   delayTime: { min: 0, max: 1000 },

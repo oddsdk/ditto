@@ -2,7 +2,7 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
-  import { Simple } from '$lib/delay'
+  import Delay from '$lib/delay/Delay.svelte'
 
   import type { Channels } from '$lib/index'
 
@@ -23,5 +23,10 @@
 </script>
 
 {#if input}
-  <Simple {input} {render} />
+  <div class="grid grid-flow-row auto-rows-max gap-5 px-10 py-5 justify-center">
+    <div class="grid justify-start pl-4">
+      <h2 class="text-2xl font-mono">Ditto</h2>
+    </div>
+    <Delay {input} {render} />
+  </div>
 {/if}
