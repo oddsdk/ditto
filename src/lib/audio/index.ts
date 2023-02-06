@@ -6,12 +6,15 @@ export type Limits = {
   [key: string]: { min: number; max: number }
 }
 
-export type Param = {
+type Param = {
   label: string
-  value: number
   min: number
   max: number
-  step: number
   unitLabel: string
-  hidden?: boolean
+}
+
+export type Params = {
+  delayTime: Param
+  feedback: Param
+  mix: Param
 }
