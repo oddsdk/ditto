@@ -6,7 +6,7 @@
   const dispatch = createEventDispatcher()
 
   function handleClick() {
-    dispatch('click', { view: 'controls' })
+    dispatch('click', { view: 'effect' })
   }
 </script>
 
