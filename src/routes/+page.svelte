@@ -2,6 +2,7 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
+  import { initialize } from '$lib/init'
   import type { Channels } from '$lib/audio/index'
   import Effect from '$components/views/Effect.svelte'
   import CloseIcon from '$components/icons/Close.svelte'
@@ -15,6 +16,7 @@
   let input: Channels
   let view: View = 'effect'
 
+  // Initialize Elementary Audio
   core.on('load', function () {
     input = {
       left: el.in({ channel: 0 }),
@@ -27,6 +29,13 @@
   }
 
   core.initialize()
+
+  // Initialize Webnative
+  async function init() {
+    await initialize()
+  }
+
+  init().catch(console.log)
 
   function setView(event: CustomEvent<{ view: View }>) {
     view = event.detail.view
