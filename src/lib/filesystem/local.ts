@@ -14,6 +14,12 @@ function setupHooks(fs: webnative.FileSystem, program: Program): void {
   }
 }
 
+/**
+ * Retrieves a local-only filesystem or creates a new filesystem if
+ * does not exist.
+ * 
+ * @param program a Webnative program
+ */
 async function localOnlyFileSystem(program: Program): Promise<webnative.FileSystem> {
   const account = { rootDID: await program.agentDID() }
   const dependencies = program.components
