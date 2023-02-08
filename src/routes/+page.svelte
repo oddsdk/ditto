@@ -37,7 +37,6 @@
   }
 
   init().catch(console.log)
-  init().then().catch(console.log)
 
   function setView(event: CustomEvent<{ view: View }>) {
     view = event.detail.view
