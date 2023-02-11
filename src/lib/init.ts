@@ -1,8 +1,10 @@
 import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 import { getLocalOnlyFs } from './filesystem/local'
+
+import * as CustomAuth from '$lib/auth'
 import { hydratePresetsStore } from '$lib/presets'
-import { localOnlyFsStore, patchStore } from '../stores'
+import { fileSystemStore, localOnlyFsStore, patchStore, programStore } from '../stores'
 import type { Patch } from './patch'
 
 export const initialize = async (): Promise<void> => {
@@ -14,6 +16,30 @@ export const initialize = async (): Promise<void> => {
 
     // TODO Delete this test once we have a presets UI
     await testLocalFs(localOnlyFs)
+
+    const configuration = {
+      namespace: { creator: 'fission', name: 'ditto' },
+      debug: true,  
+    }
+
+    const program = await webnative.program({
+      ...configuration,
+      auth: await CustomAuth.implementation(configuration)
+    })
+
+    programStore.set(program)
+
+    const { session } = program
+
+    if (session && session.fs) {
+      fileSystemStore.set(session.fs)
+
+    } else {
+      const localOnlyFs = await getLocalOnlyFs()
+      fileSystemStore.set(localOnlyFs)
+
+    }
+
 
   } catch (error) {
     console.error(error)
