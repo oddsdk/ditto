@@ -1,86 +1,49 @@
 <script lang="ts">
-  import type { Program } from 'webnative'
   import { programStore } from '../../stores'
+  import Register from '$components/views/connect/Register.svelte'
+  import Link from '$components/views/connect/Link.svelte'
+  import ConfirmPin from '$components/views/connect/ConfirmPin.svelte'
+  import Connected from '$components/views/connect/Connected.svelte'
 
-  type View = 'connect' | 'link' | 'confirm-pin' | 'connected'
+  type View = 'register' | 'link' | 'confirm-pin' | 'connected'
 
-  let program: Program | null = $programStore
+  const program = $programStore
+  let view: View
 
-  let checkingUsername = false
-  let username = ''
-  let usernameAvailable = false
-  let usernameValid = false
-  let view: View = 'connect'
-
-  async function checkUsername(event: { currentTarget: HTMLInputElement }) {
-    checkingUsername = true
-    username = event.currentTarget.value
-
-    if (program) {
-      usernameValid = await program.auth.isUsernameValid(username)
-      usernameAvailable = await program.auth.isUsernameAvailable(username)
-    }
-
-    checkingUsername = false
+  if (program?.session) {
+    view = 'link'
+  } else {
+    view = 'register'
   }
 
-  $: usernameError =
-    username.length > 0 &&
-    !checkingUsername &&
-    (!usernameValid || !usernameAvailable)
+  function navigate(event: CustomEvent<{ from: View }>) {
+    switch (event.detail.from) {
+      case 'register':
+        view = 'link'
+        break
 
-  function registerUser() {
-    // register user
-    view = 'link'
+      case 'link':
+        view = 'confirm-pin'
+        break
+
+      case 'confirm-pin':
+        view = 'connected'
+        break
+
+      default:
+        break
+    }
   }
 </script>
 
 <div class="grid grid-flow-row auto-rows px-4">
-  {#if view === 'connect'}
-    <div class="grid grid-flow-row auto-rows gap-2">
-      <div>Connect to sync your presets to the web.</div>
-      <div id="connect" class="form-control w-full max-w-xs gap-4">
-        <div>
-          <label class="label" for="connect">
-            <span class="label-text">Choose a username</span>
-          </label>
-          <input
-            type="text"
-            placeholder=""
-            spellcheck="false"
-            class="input input-bordered w-full max-w-xs"
-            class:input-error={usernameError}
-            on:input={checkUsername}
-          />
-          {#if username.length > 0}
-            {#if !usernameValid}
-              <label class="label" for="connect">
-                <span class="label-text-alt text-error">
-                  Username is invalid
-                </span>
-              </label>
-            {:else if !usernameAvailable}
-              <label class="label pb-0" for="connect">
-                <span class="label-text-alt text-error">
-                  Username is unavailable
-                </span>
-              </label>
-            {/if}
-          {/if}
-        </div>
-
-        <button
-          class="btn btn-primary"
-          disabled={username.length === 0 || usernameError}
-          on:click={registerUser}
-        >
-          Connect
-        </button>
-      </div>
-    </div>
+  {#if view === 'register'}
+    <Register on:navigate={navigate} />
   {:else if view === 'link'}
-    Scan QRCode on mobile or copy the link
-
-    <!-- QRCode and copy link side-by-side? -->
+    <Link on:navigate={navigate} />
+  {:else if view === 'confirm-pin'}
+    <ConfirmPin on:navigate={navigate} />
+  {:else if view === 'connected'}
+    <Connected on:navigate={navigate} />
   {/if}
 </div>
