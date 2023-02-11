@@ -19,7 +19,7 @@ const config = {
   },
   server: {
     fs: {
-      allow: ['./']
+      allow: [ './' ]
     },
     https: {
       key: fs.readFileSync('./elem.key.pem'),
