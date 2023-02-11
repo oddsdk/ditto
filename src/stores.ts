@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import { writable, type Writable } from 'svelte/store'
-import type { FileSystem } from 'webnative'
+import type { FileSystem, Program } from 'webnative'
 
+import { version } from '../package.json'
 import { DEFAULT_PATCH, type Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 import type { Presets } from '$lib/presets'
+
+export const fileSystemStore: Writable<FileSystem | null> = writable(null)
 
 export const localOnlyFsStore: Writable<FileSystem | null> = writable(null)
 
@@ -15,3 +19,5 @@ export const presetsStore = writable<Presets>({
   selectedCategory: DEFAULT_CATEGORIES[0],
   selectedPatch: DEFAULT_PATCH.id,
 })
+
+export const programStore: Writable<Program | null> = writable(null)
