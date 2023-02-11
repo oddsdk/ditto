@@ -33,8 +33,6 @@
   }
 
   async function registerUser() {
-    // register user
-
     if (program) {
       const { success } = await program.auth.register({
         username: `${usernamePrefix}${username}`

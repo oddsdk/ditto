@@ -4,6 +4,7 @@ import type { Configuration } from 'webnative'
 
 import { asyncDebounce } from '$lib/utils'
 
+export const dittoAppURL = 'https://ditto.fission.app'
 export const usernamePrefix = 'ditto-'
 
 export async function implementation(configuration: Configuration): Promise<Auth.Implementation<Components>> {
