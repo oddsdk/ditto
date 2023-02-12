@@ -62,7 +62,7 @@
     {#if view === 'effect'}
       <Effect {input} {render} />
     {:else if view === 'connect'}
-      <Connect />
+      <Connect on:navigate={setView} />
     {:else if view === 'presets'}
       <Presets />
     {/if}

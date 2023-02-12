@@ -48,8 +48,7 @@
 
         console.log('presets node', presetsNode)
 
-        // Dispatch view change message
-        dispatch('navigate', { from: 'register' })
+        dispatch('register', { username })
       } else {
         console.log('failed to register user')
       }

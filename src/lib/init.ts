@@ -19,7 +19,7 @@ export const initialize = async (): Promise<void> => {
 
     const configuration = {
       namespace: { creator: 'fission', name: 'ditto' },
-      debug: true,  
+      debug: true,
     }
 
     const program = await webnative.program({

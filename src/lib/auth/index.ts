@@ -15,3 +15,18 @@ export async function implementation(configuration: Configuration): Promise<Auth
     isUsernameAvailable: asyncDebounce(base.isUsernameAvailable, 300)
   }
 }
+
+
+// Connected Status
+
+export type ConnectedStatus = { connected: boolean }
+
+export function isConnectedStatus(status: unknown): status is ConnectedStatus {
+  return (
+    status !== null &&
+    typeof status === 'object' &&
+    'connected' in status &&
+    status.connected !== null &&
+    typeof status.connected === 'boolean'
+  )
+}
