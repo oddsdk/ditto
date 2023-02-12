@@ -15,7 +15,6 @@
   const dispatch = createEventDispatcher()
 
   let program: webnative.Program | null
-  let session: webnative.Session | null
   let username = ''
 
   let accountLinkingProducer: AccountLinkingProducer
@@ -28,35 +27,43 @@
   const unsubscribeProgramStore = programStore.subscribe(val => {
     program = val
 
+    /** Initialize connect view
+     *
+     * If a session exists, the user has already registered.
+     * Check to see if they have connected to the web companion
+     * app. If they have, show the connected view. Otherwise,
+     * initiate account linking and show the link view.
+     */
     if (program) {
-      session = program.session
+      program.auth
+        .session()
+        .then(session => {
+          if (session?.fs) {
+            username = session.username
+            const fs = session.fs
 
-      /** Initialize connect view
-       *
-       * If a session exists, the user has already registered.
-       * Check to see if they have connected to the web companion
-       * app. If they have, show the connected view. Otherwise,
-       * initiate account linking and show the link view.
-       */
-      if (session?.fs) {
-        username = session.username
-        const fs = session.fs
-
-        checkConnectedStatus(fs)
-          .then(async connected => {
-            if (connected) {
-              view = 'connected'
-            } else {
-              view = 'link'
-              await initAccountLinkingProducer(username)
-            }
-          })
-          .catch(err =>
-            console.error('Error checking connection status: ', err)
+            checkConnectedStatus(fs)
+              .then(async connected => {
+                if (connected) {
+                  view = 'connected'
+                } else {
+                  view = 'link'
+                  await initAccountLinkingProducer(username)
+                }
+              })
+              .catch(err =>
+                console.error('Error checking connection status: ', err)
+              )
+          } else {
+            view = 'register'
+          }
+        })
+        .catch(err =>
+          console.error(
+            'Unable to retrieve session when initialing connect view: ',
+            err
           )
-      } else {
-        view = 'register'
-      }
+        )
     }
   })
 
@@ -99,10 +106,6 @@
     view = 'link'
   }
 
-  function handlePinConfirmed() {
-    view = 'connected'
-  }
-
   function handleLinkingCanceled() {
     accountLinkingProducer.cancel()
 
@@ -121,10 +124,24 @@
 
       accountLinkingProducer.on('link', ({ approved }) => {
         if (approved) {
-          if (session?.fs) {
-            setConnectedStatus(session.fs).catch(err => {
-              console.warn('Failed to set connected status: ', err)
-            })
+          view = 'connected'
+
+          if (program) {
+            program.auth
+              .session()
+              .then(session => {
+                if (session?.fs) {
+                  setConnectedStatus(session.fs).catch(err => {
+                    console.warn('Failed to set connected status: ', err)
+                  })
+                }
+              })
+              .catch(err =>
+                console.error(
+                  'Unable to retrieve session when storing connected status: ',
+                  err
+                )
+              )
           }
         }
       })
@@ -143,12 +160,7 @@
   {:else if view === 'link'}
     <Link {username} />
   {:else if view === 'confirm-pin'}
-    <ConfirmPin
-      {pin}
-      {confirmPin}
-      on:confirm={handlePinConfirmed}
-      on:cancel={handleLinkingCanceled}
-    />
+    <ConfirmPin {pin} {confirmPin} on:cancel={handleLinkingCanceled} />
   {:else if view === 'connected'}
     <Connected />
   {/if}

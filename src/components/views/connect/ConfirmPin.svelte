@@ -15,7 +15,7 @@
       if (pin.join('') === pinInput) {
         confirmPin()
 
-        dispatch('confirm')
+        // show spinner
       } else {
         pinError = true
       }
