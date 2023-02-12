@@ -112,6 +112,11 @@
     dispatch('navigate', { view: 'effect' })
   }
 
+  async function handleRelink() {
+    await initAccountLinkingProducer(username)
+    view = 'link'
+  }
+
   async function initAccountLinkingProducer(username: string) {
     if (program) {
       accountLinkingProducer = await program.auth.accountProducer(username)
@@ -162,6 +167,6 @@
   {:else if view === 'confirm-pin'}
     <ConfirmPin {pin} {confirmPin} on:cancel={handleLinkingCanceled} />
   {:else if view === 'connected'}
-    <Connected />
+    <Connected on:relink={handleRelink} />
   {/if}
 </div>
