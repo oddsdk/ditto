@@ -3,30 +3,23 @@
   import QRCode from 'qrcode-svg'
 
   import { dittoAppURL } from '$lib/auth'
-  import { programStore } from '../../../stores'
   import Share from '$components/icons/Share.svelte'
+
+  export let username: string
 
   let connectionLink: string
   let qrcode: string = ''
 
-  programStore.subscribe(program => {
-    const username = program?.session?.username
-
-    if (username) {
-      connectionLink = `${dittoAppURL}/link-device?username=${username}`
-      qrcode = new QRCode({
-        content: connectionLink,
-        color: '#e2e2e2',
-        background: '#000',
-        padding: 0,
-        width: 150,
-        height: 150,
-        join: true
-      }).svg()
-    } else {
-      console.log('username missing', username)
-    }
-  })
+  connectionLink = `${dittoAppURL}/link-device?username=${username}`
+  qrcode = new QRCode({
+    content: connectionLink,
+    color: '#e2e2e2',
+    background: '#000',
+    padding: 0,
+    width: 150,
+    height: 150,
+    join: true
+  }).svg()
 
   const copyLink = async () => {
     await clipboardCopy(connectionLink)

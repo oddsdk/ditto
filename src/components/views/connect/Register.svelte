@@ -39,18 +39,24 @@
       })
 
       if (success) {
-        // Copy data to synced file system
-        const localOnlyFs = await getLocalOnlyFs()
+        const session = await program.auth.session()
 
-        const presetsNode = await localOnlyFs.get(
-          webnative.path.directory('private', 'presets')
-        )
+        if (session) {
+          // Copy data to synced file system
+          // const localOnlyFs = await getLocalOnlyFs()
 
-        console.log('presets node', presetsNode)
+          // const presetsNode = await localOnlyFs.get(
+          //   webnative.path.directory('private', 'presets')
+          // )
 
-        dispatch('register', { username })
+          // console.log('presets node', presetsNode)
+
+          dispatch('register', { username: session.username })
+        } else {
+          console.error('Session failed to load after registration')
+        }
       } else {
-        console.log('failed to register user')
+        console.error('Failed to register user')
       }
     }
   }

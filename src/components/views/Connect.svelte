@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as webnative from 'webnative'
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onDestroy } from 'svelte'
   import type { AccountLinkingProducer } from 'webnative'
 
   import { programStore } from '../../stores'
@@ -14,8 +14,10 @@
 
   const dispatch = createEventDispatcher()
 
-  const program = $programStore
-  const session = program?.session
+  let program: webnative.Program | null
+  let session: webnative.Session | null
+  let username = ''
+
   let accountLinkingProducer: AccountLinkingProducer
   let pin: number[]
   let view: View
@@ -23,29 +25,40 @@
     return
   }
 
-  /** Initialize connect view
-   *
-   * If a session exists, the user has already registered.
-   * Check to see if they have connected to the web companion
-   * app. If they have, show the connected view. Otherwise,
-   * initiate account linking and show the link view.
-   */
-  if (session?.fs) {
-    const { fs, username } = session
+  const unsubscribeProgramStore = programStore.subscribe(val => {
+    program = val
 
-    checkConnectedStatus(fs)
-      .then(async connected => {
-        if (connected) {
-          view = 'connected'
-        } else {
-          await initAccountLinkingProducer(username)
-          view = 'link'
-        }
-      })
-      .catch(err => console.error('Error checking connection status: ', err))
-  } else {
-    view = 'register'
-  }
+    if (program) {
+      session = program.session
+
+      /** Initialize connect view
+       *
+       * If a session exists, the user has already registered.
+       * Check to see if they have connected to the web companion
+       * app. If they have, show the connected view. Otherwise,
+       * initiate account linking and show the link view.
+       */
+      if (session?.fs) {
+        username = session.username
+        const fs = session.fs
+
+        checkConnectedStatus(fs)
+          .then(async connected => {
+            if (connected) {
+              view = 'connected'
+            } else {
+              view = 'link'
+              await initAccountLinkingProducer(username)
+            }
+          })
+          .catch(err =>
+            console.error('Error checking connection status: ', err)
+          )
+      } else {
+        view = 'register'
+      }
+    }
+  })
 
   async function checkConnectedStatus(
     fs: webnative.FileSystem
@@ -80,7 +93,7 @@
   }
 
   async function link(event: CustomEvent<{ username: string }>) {
-    const { username } = event.detail
+    username = event.detail.username
 
     await initAccountLinkingProducer(username)
     view = 'link'
@@ -100,8 +113,6 @@
     if (program) {
       accountLinkingProducer = await program.auth.accountProducer(username)
 
-      console.log('account linking producer started')
-
       accountLinkingProducer.on('challenge', detail => {
         pin = detail.pin
         confirmPin = detail.confirmPin
@@ -119,13 +130,18 @@
       })
     }
   }
+
+  onDestroy(() => {
+    unsubscribeProgramStore()
+    if (accountLinkingProducer) accountLinkingProducer.cancel()
+  })
 </script>
 
 <div class="grid grid-flow-row auto-rows px-4">
   {#if view === 'register'}
     <Register on:register={link} />
   {:else if view === 'link'}
-    <Link />
+    <Link {username} />
   {:else if view === 'confirm-pin'}
     <ConfirmPin
       {pin}
