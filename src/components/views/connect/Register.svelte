@@ -12,20 +12,20 @@
   let program: Program | null = $programStore
 
   let checkingUsername = false
-  let username = ''
+  let displayName = ''
   let usernameAvailable = false
   let usernameValid = false
 
   async function checkUsername(event: { currentTarget: HTMLInputElement }) {
     checkingUsername = true
-    username = event.currentTarget.value
+    displayName = event.currentTarget.value
 
     if (program) {
       usernameValid = await program.auth.isUsernameValid(
-        `${usernamePrefix}${username}`
+        `${usernamePrefix}${displayName}`
       )
       usernameAvailable = await program.auth.isUsernameAvailable(
-        `${usernamePrefix}${username}`
+        `${usernamePrefix}${displayName}`
       )
     }
 
@@ -35,7 +35,7 @@
   async function registerUser() {
     if (program) {
       const { success } = await program.auth.register({
-        username: `${usernamePrefix}${username}`
+        username: `${usernamePrefix}${displayName}`
       })
 
       if (success) {
@@ -74,7 +74,7 @@
   }
 
   $: usernameError =
-    username.length > 0 &&
+    displayName.length > 0 &&
     !checkingUsername &&
     (!usernameValid || !usernameAvailable)
 </script>
@@ -94,7 +94,7 @@
         class:input-error={usernameError}
         on:input={checkUsername}
       />
-      {#if username.length > 0}
+      {#if displayName.length > 0}
         {#if !usernameValid}
           <label class="label" for="connect">
             <span class="label-text-alt text-error"> Username is invalid </span>
@@ -111,7 +111,7 @@
 
     <button
       class="btn btn-primary"
-      disabled={username.length === 0 || usernameError}
+      disabled={displayName.length === 0 || usernameError}
       on:click={registerUser}
     >
       Connect
