@@ -42,14 +42,28 @@
         const session = await program.auth.session()
 
         if (session) {
-          // Copy data to synced file system
-          // const localOnlyFs = await getLocalOnlyFs()
+          const fs = session.fs
 
-          // const presetsNode = await localOnlyFs.get(
-          //   webnative.path.directory('private', 'presets')
-          // )
+          if (fs) {
+            // Set connectedStatus. After the user links to the web app,
+            // connectedStatus is set to true.
+            await fs.write(
+              webnative.path.file('private', 'connectedStatus'),
+              new TextEncoder().encode(JSON.stringify({ connected: false }))
+            )
+            await fs.publish()
 
-          // console.log('presets node', presetsNode)
+            // Copy data to synced file system
+            // const localOnlyFs = await getLocalOnlyFs()
+
+            // const presetsNode = await localOnlyFs.get(
+            //   webnative.path.directory('private', 'presets')
+            // )
+
+            // console.log('presets node', presetsNode)
+          } else {
+            console.error('File system missing on session at registration')
+          }
 
           dispatch('register', { username: session.username })
         } else {
