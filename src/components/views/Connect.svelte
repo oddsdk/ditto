@@ -1,20 +1,21 @@
 <script lang="ts">
-  import * as webnative from 'webnative'
+  import type * as webnative from 'webnative'
   import { createEventDispatcher, onDestroy } from 'svelte'
   import type { AccountLinkingProducer } from 'webnative'
 
-  import { programStore } from '../../stores'
+  import { authStore } from '../../stores'
+  import { setConnectedStatus } from '$lib/auth/connected'
   import Register from '$components/views/connect/Register.svelte'
   import Link from '$components/views/connect/Link.svelte'
   import ConfirmPin from '$components/views/connect/ConfirmPin.svelte'
   import Connected from '$components/views/connect/Connected.svelte'
-  import { isConnectedStatus, type ConnectedStatus } from '$lib/auth'
 
   type View = 'register' | 'link' | 'confirm-pin' | 'connected'
 
   const dispatch = createEventDispatcher()
 
-  let program: webnative.Program | null
+  let authStrategy: webnative.AuthenticationStrategy | null
+  let session: webnative.Session | null
   let username = ''
 
   let accountLinkingProducer: AccountLinkingProducer
@@ -24,80 +25,33 @@
     return
   }
 
-  const unsubscribeProgramStore = programStore.subscribe(val => {
-    program = val
+  const unsubscribeAuthStore = authStore.subscribe(auth => {
+    const connected = auth.connectedStatus
+    authStrategy = auth.authStrategy
+    session = auth.session
 
-    /** Initialize connect view
-     *
-     * If a session exists, the user has already registered.
-     * Check to see if they have connected to the web companion
-     * app. If they have, show the connected view. Otherwise,
-     * initiate account linking and show the link view.
-     */
-    if (program) {
-      program.auth
-        .session()
-        .then(session => {
-          if (session?.fs) {
-            username = session.username
-            const fs = session.fs
+    //   /** Initialize connect view
+    //    *
+    //    * If a session exists, the user has already registered.
+    //    * Check to see if they have connected to the web companion
+    //    * app. If they have, show the connected view. Otherwise,
+    //    * initiate account linking and show the link view.
+    //    */
+    if (session) {
+      username = session.username
 
-            checkConnectedStatus(fs)
-              .then(async connected => {
-                if (connected) {
-                  view = 'connected'
-                } else {
-                  view = 'link'
-                  await initAccountLinkingProducer(username)
-                }
-              })
-              .catch(err =>
-                console.error('Error checking connection status: ', err)
-              )
-          } else {
-            view = 'register'
-          }
-        })
-        .catch(err =>
-          console.error(
-            'Unable to retrieve session when initialing connect view: ',
-            err
-          )
+      if (connected) {
+        view = 'connected'
+      } else {
+        view = 'link'
+        initAccountLinkingProducer(username).catch(err =>
+          console.error('Failed to initialize account linking producer: ', err)
         )
+      }
+    } else {
+      view = 'register'
     }
   })
-
-  async function checkConnectedStatus(
-    fs: webnative.FileSystem
-  ): Promise<boolean> {
-    const statusExists = await fs.exists(
-      webnative.path.file('private', 'connectedStatus')
-    )
-
-    if (statusExists) {
-      // `status` is checked with type guard before use
-      // eslint-disable-next-line
-      const status: ConnectedStatus = JSON.parse(
-        new TextDecoder().decode(
-          await fs.read(webnative.path.file('private', 'connectedStatus'))
-        )
-      )
-
-      if (isConnectedStatus(status)) {
-        return status.connected
-      }
-    }
-
-    return false
-  }
-
-  async function setConnectedStatus(fs: webnative.FileSystem) {
-    await fs.write(
-      webnative.path.file('private', 'connectedStatus'),
-      new TextEncoder().encode(JSON.stringify({ connected: true }))
-    )
-    await fs.publish()
-  }
 
   async function link(event: CustomEvent<{ username: string }>) {
     username = event.detail.username
@@ -107,7 +61,7 @@
   }
 
   function handleLinkingCanceled() {
-    accountLinkingProducer.cancel()
+    if (accountLinkingProducer) accountLinkingProducer.cancel()
 
     dispatch('navigate', { view: 'effect' })
   }
@@ -118,8 +72,8 @@
   }
 
   async function initAccountLinkingProducer(username: string) {
-    if (program) {
-      accountLinkingProducer = await program.auth.accountProducer(username)
+    if (authStrategy) {
+      accountLinkingProducer = await authStrategy.accountProducer(username)
 
       accountLinkingProducer.on('challenge', detail => {
         pin = detail.pin
@@ -131,22 +85,14 @@
         if (approved) {
           view = 'connected'
 
-          if (program) {
-            program.auth
-              .session()
-              .then(session => {
-                if (session?.fs) {
-                  setConnectedStatus(session.fs).catch(err => {
-                    console.warn('Failed to set connected status: ', err)
-                  })
-                }
-              })
-              .catch(err =>
-                console.error(
-                  'Unable to retrieve session when storing connected status: ',
-                  err
-                )
-              )
+          if (session?.fs) {
+            setConnectedStatus(session.fs, true).catch(err => {
+              console.error('Failed to set connected status: ', err)
+            })
+          } else {
+            console.error(
+              'Unable to retrieve session when setting connected status'
+            )
           }
         }
       })
@@ -154,7 +100,7 @@
   }
 
   onDestroy(() => {
-    unsubscribeProgramStore()
+    unsubscribeAuthStore()
     if (accountLinkingProducer) accountLinkingProducer.cancel()
   })
 </script>

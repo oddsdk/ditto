@@ -2,8 +2,8 @@
   import * as webnative from 'webnative'
   import { createEventDispatcher } from 'svelte'
 
-  import { getLocalOnlyFs } from '$lib/filesystem/local'
-  import { programStore } from '../../../stores'
+  // import { getLocalOnlyFs } from '$lib/filesystem/local'
+  import { programStore, sessionStore } from '../../../stores'
   import { usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
 
@@ -53,14 +53,12 @@
             )
             await fs.publish()
 
-            // Copy data to synced file system
-            // const localOnlyFs = await getLocalOnlyFs()
+            sessionStore.set({
+              connectedStatus: false,
+              session
+            })
 
-            // const presetsNode = await localOnlyFs.get(
-            //   webnative.path.directory('private', 'presets')
-            // )
-
-            // console.log('presets node', presetsNode)
+            // TODO Copy data to synced file system
           } else {
             console.error('File system missing on session at registration')
           }
