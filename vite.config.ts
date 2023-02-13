@@ -4,11 +4,18 @@ import fs from 'fs'
 
 /** @type {import('vite').UserConfig} */
 const config = {
+  build: {
+    sourcemap: true
+  },
   plugins: [sveltekit()],
   resolve: {
     alias: {
-      $components: resolve('./src/components')
-    }
+      $components: resolve('./src/components'),
+      $root: resolve('./'),
+      $routes: resolve('./src/routes'),
+      $src: resolve('./src'),
+      $static: resolve('./static')
+    },
   },
   server: {
     fs: {

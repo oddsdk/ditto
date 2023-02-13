@@ -1,6 +1,7 @@
 import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 import { getLocalOnlyFs } from './filesystem/local'
+import { hydratePresetsStore } from '$lib/presets'
 import { localOnlyFsStore, patchStore } from '../stores'
 import type { Patch } from './patch'
 
@@ -9,6 +10,7 @@ export const initialize = async (): Promise<void> => {
     const localOnlyFs = await getLocalOnlyFs()
 
     localOnlyFsStore.set(localOnlyFs)
+    await hydratePresetsStore()
 
     // TODO Delete this test once we have a presets UI
     await testLocalFs(localOnlyFs)

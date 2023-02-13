@@ -1,23 +1,17 @@
-import { writable } from 'svelte/store'
-import type { Writable } from 'svelte/store'
-
-
+import { writable, type Writable } from 'svelte/store'
 import type { FileSystem } from 'webnative'
-import { version } from '../package.json'
-import type { Patch } from '$lib/patch'
+
+import { DEFAULT_PATCH, type Patch } from '$lib/patch'
+import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
+import type { Presets } from '$lib/presets'
 
 export const localOnlyFsStore: Writable<FileSystem | null> = writable(null)
 
-export const patchStore: Writable<Patch> = writable({
-  version,
-  id: 'default',
-  creator: 'bgins',
-  params: {
-    delayTime: 200,
-    feedback: 0,
-    mix: 50
-  },
-  notes: '',
-  tags: [],
-  visibility: 'public'
+export const patchStore: Writable<Patch> = writable(DEFAULT_PATCH)
+
+export const presetsStore = writable<Presets>({
+  categories: [],
+  presets: [],
+  selectedCategory: DEFAULT_CATEGORIES[0],
+  selectedPatch: DEFAULT_PATCH.id,
 })

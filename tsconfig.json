@@ -15,7 +15,15 @@
       "$components": ["src/components"],
       "$components/*": ["src/components/*"],
       "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"]
+      "$lib/*": ["src/lib/*"],
+      "$root": [""],
+      "$root/*": ["*"],
+      "$routes": ["src/routes"],
+      "$routes/*": ["src/routes/*"],
+      "$src": ["src"],
+      "$src/*": ["src/*"],
+      "$static": ["static"],
+      "$static/*": ["static/*"]
     }
   },
   "include": [
