@@ -23,7 +23,9 @@
     {#if $patchStore.tags.length}
       <span class="text-xs mr-auto">Category: {$patchStore.tags.join(', ')}</span>
     {/if}
-    <span class="text-xs ml-auto">By: {$patchStore.creator}</span>
+    {#if $patchStore.creator}
+      <span class="text-xs ml-auto">By: {$patchStore.creator}</span>
+    {/if}
   </div>
 
   <ArrowLeft />
