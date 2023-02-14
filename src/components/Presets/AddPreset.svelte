@@ -12,7 +12,6 @@
     const data: FormData = new FormData(formEl)
 
     const preset: Patch = {
-      creator: null,
       favorite: false,
       id: crypto.randomUUID(),
       name: data.get('name') as string,
