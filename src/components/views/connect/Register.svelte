@@ -2,10 +2,14 @@
   import * as webnative from 'webnative'
   import { createEventDispatcher } from 'svelte'
 
-  // import { getLocalOnlyFs } from '$lib/filesystem/local'
-  import { programStore, sessionStore } from '../../../stores'
+  import { fileSystemStore, programStore, sessionStore } from '../../../stores'
+  import {
+    loadFromFilesystem as loadPresets,
+    storeToFilesystem as storePresets
+  } from '$lib/presets'
   import { usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
+  import { Visibility } from '$lib/patch'
 
   const dispatch = createEventDispatcher()
 
@@ -58,7 +62,14 @@
               session
             })
 
-            // TODO Copy data to synced file system
+            // Load presets from local-only filesystem
+            const presets = await loadPresets(Visibility.private)
+
+            // Switch to persistent filesystem
+            fileSystemStore.set(fs)
+
+            // Store presets in persistent filesystem
+            await storePresets(presets, Visibility.private)
           } else {
             console.error('File system missing on session at registration')
           }
