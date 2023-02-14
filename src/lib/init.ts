@@ -4,19 +4,13 @@ import { getLocalOnlyFs } from './filesystem/local'
 
 import * as CustomAuth from '$lib/auth'
 import { hydratePresetsStore } from '$lib/presets'
-import { fileSystemStore, localOnlyFsStore, patchStore, programStore, sessionStore } from '../stores'
+import { fileSystemStore, patchStore, programStore, sessionStore } from '../stores'
 import { checkConnectedStatus } from '$lib/auth/connected'
-import type { Patch } from './patch'
 
 export const initialize = async (): Promise<void> => {
   try {
-    const localOnlyFs = await getLocalOnlyFs()
-
-    localOnlyFsStore.set(localOnlyFs)
-    await hydratePresetsStore()
-
     // TODO Delete this test once we have a presets UI
-    await testLocalFs(localOnlyFs)
+    // await testLocalFs(localOnlyFs)
 
     const configuration = {
       namespace: { creator: 'fission', name: 'ditto' },
@@ -50,6 +44,7 @@ export const initialize = async (): Promise<void> => {
 
     }
 
+    await hydratePresetsStore()
 
   } catch (error) {
     console.error(error)

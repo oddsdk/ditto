@@ -1,7 +1,7 @@
 import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 
-import { fileSystemStore, localOnlyFsStore, presetsStore } from '../../stores'
+import { fileSystemStore, presetsStore } from '../../stores'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
 
@@ -88,7 +88,7 @@ const addOrUpdate = (arr: Patch[], element: Patch): Patch[] => {
  * @param preset Patch
  */
 export const savePreset = async (preset: Patch) => {
-  const localOnlyFs = getStore(localOnlyFsStore)
+  const localOnlyFs = getStore(fileSystemStore)
   const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
 
   await localOnlyFs?.write(

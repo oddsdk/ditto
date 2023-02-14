@@ -8,8 +8,6 @@ import type { Presets } from '$lib/presets'
 
 export const fileSystemStore: Writable<webnative.FileSystem | null> = writable(null)
 
-export const localOnlyFsStore: Writable<webnative.FileSystem | null> = writable(null)
-
 export const patchStore: Writable<Patch> = writable(DEFAULT_PATCH)
 
 export const presetsStore = writable<Presets>({
