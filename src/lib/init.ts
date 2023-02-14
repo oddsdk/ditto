@@ -1,17 +1,13 @@
 import * as webnative from 'webnative'
-import { get as getStore } from 'svelte/store'
 import { getLocalOnlyFs } from './filesystem/local'
 
 import * as CustomAuth from '$lib/auth'
 import { hydratePresetsStore } from '$lib/presets'
-import { fileSystemStore, patchStore, programStore, sessionStore } from '../stores'
+import { fileSystemStore, programStore, sessionStore } from '../stores'
 import { checkConnectedStatus } from '$lib/auth/connected'
 
 export const initialize = async (): Promise<void> => {
   try {
-    // TODO Delete this test once we have a presets UI
-    // await testLocalFs(localOnlyFs)
-
     const configuration = {
       namespace: { creator: 'fission', name: 'ditto' },
       debug: true,
@@ -39,9 +35,6 @@ export const initialize = async (): Promise<void> => {
       const localOnlyFs = await getLocalOnlyFs()
       fileSystemStore.set(localOnlyFs)
 
-      // TODO Delete this test once we have a presets UI
-      await testLocalFs(localOnlyFs)
-
     }
 
     await hydratePresetsStore()
@@ -50,21 +43,4 @@ export const initialize = async (): Promise<void> => {
     console.error(error)
 
   }
-}
-
-async function testLocalFs(localOnlyFs: webnative.FileSystem) {
-  const contentPath = webnative.path.file('private', 'presets', 'default.json')
-  const defaultPatch = getStore(patchStore)
-
-  await localOnlyFs.write(
-    contentPath,
-    new TextEncoder().encode(JSON.stringify(defaultPatch))
-  )
-  await localOnlyFs.publish()
-
-  const storedPatch = JSON.parse(new TextDecoder().decode(
-    await localOnlyFs.read(contentPath)
-  ))
-
-  console.log('stored patch', storedPatch)
 }
