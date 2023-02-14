@@ -8,7 +8,7 @@
   import CloseIcon from '$components/icons/Close.svelte'
   import Connect from '$components/views/Connect.svelte'
   import ConnectIcon from '$components/icons/Connect.svelte'
-  import PresetHeader from '$components/Presets/PresetHeader.svelte'
+  import PresetHeader from '$components/presets/PresetHeader.svelte'
   import Presets from '$components/views/Presets.svelte'
   import PresetsIcon from '$components/icons/Presets.svelte'
 
