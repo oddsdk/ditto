@@ -30,15 +30,15 @@
   <div class="flex items-center justify-between py-5 border-t-2 border-b-2 border-gray-200 mb-5">
     <div class="text-center">
       <h6 class="text-lg">Time</h6>
-      <p class="text-sm">{preset?.params?.delayTime}</p>
+      <p class="text-sm">{preset?.params?.delayTime?.toFixed(0)}</p>
     </div>
     <div class="text-center">
       <h6 class="text-lg">Feedback</h6>
-      <p class="text-sm">{preset?.params?.feedback}</p>
+      <p class="text-sm">{preset?.params?.feedback?.toFixed(0)}</p>
     </div>
     <div class="text-center">
       <h6 class="text-lg">Mix</h6>
-      <p class="text-sm">{preset?.params?.mix}</p>
+      <p class="text-sm">{preset?.params?.mix?.toFixed(0)}</p>
     </div>
   </div>
 
