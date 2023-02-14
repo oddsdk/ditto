@@ -7,17 +7,22 @@
   export let preset: Patch
   export let handleCancelClick: () => void
 
-  const handleSubmit = async (event: Event): Promise<void> => {
-    const formEl = event.target as HTMLFormElement
-    const data: FormData = new FormData(formEl)
+  let name: string = preset?.name
+  let notes: string = preset?.notes
+  let tags: string = preset?.tags?.join(', ')
+  let visibility: Visibility = preset?.visibility
 
+  const handleSubmit = async (): Promise<void> => {
+    console.log('name', name)
+    console.log('notes', notes)
+    console.log('tags', tags)
+    console.log('visibility', visibility)
     const updatedPreset: Patch = {
       ...preset,
-      name: (data.get('name') || preset.name) as string,
-      notes: (data.get('notes') || preset.notes) as string,
-      // @ts-ignore: Type mismatch from form data
-      tags: (data.get('tags') ? data.get('tags')?.split(',')?.map((tag: string) => tag.trim()) : preset.tags) as string[],
-      visibility: (data.get('visibility') || preset.visibility) as Visibility,
+      name,
+      notes,
+      tags: tags?.split(',')?.map((tag: string) => tag.trim()),
+      visibility: visibility,
     }
 
     await savePreset(updatedPreset)
@@ -42,16 +47,16 @@
 
 <form on:submit={handleSubmit}>
   <label for="name" class="mb-1 text-xs">Name</label>
-  <input type="text" name="name" value={preset?.name} class="input input-bordered w-full mb-3" spellcheck="false" />
+  <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
   <textarea class="textarea textarea-bordered w-full mb-3" name="notes" value={preset?.notes}></textarea>
 
   <label for="visibility" class="mb-1 text-xs">Tags(comma separated)</label>
-  <input type="text" name="tags" value={preset?.tags?.join(', ')} class="input input-bordered w-full mb-3" spellcheck="false" />
+  <input type="text" name="tags" bind:value={tags} class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
-  <select class="select select-bordered w-full mb-8" name="visibility">
+  <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility">
     <option selected={preset?.visibility === Visibility.public} value={Visibility.public}>Public</option>
     <option selected={preset?.visibility === Visibility.private} value={Visibility.private}>Private</option>
   </select>

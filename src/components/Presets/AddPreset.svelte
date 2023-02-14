@@ -7,25 +7,25 @@
 
   export let handleCancelClick: () => void
 
-  const handleSubmit = async (event: Event): Promise<void> => {
-    const formEl = event.target as HTMLFormElement
-    const data: FormData = new FormData(formEl)
+  let name: string
+  let notes: string
+  let tags: string
+  let visibility: Visibility
 
+  const handleSubmit = async (): Promise<void> => {
     const preset: Patch = {
       favorite: false,
       id: crypto.randomUUID(),
-      name: data.get('name') as string,
-      notes: data.get('notes') as string,
+      name,
+      notes,
       params: {
         delayTime: 200,
         feedback: 0,
         mix: 50
       },
-      // @ts-ignore: Type mismatch from form data
-      tags: (data.get('tags') ? data.get('tags')?.split(',')?.map((tag: string) => tag.trim()) : []) as string[],
+      tags: tags ? tags?.split(',')?.map((tag: string) => tag.trim()) : [],
       version,
-      // @ts-ignore: Type mismatch from form data
-      visibility: data.get('visibility') as Visibility,
+      visibility,
     }
 
     await savePreset(preset)
@@ -51,16 +51,16 @@
 
 <form on:submit={handleSubmit}>
   <label for="name" class="mb-1 text-xs">Name</label>
-  <input type="text" name="name" class="input input-bordered w-full mb-3" spellcheck="false" required />
+  <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" required />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
-  <textarea class="textarea textarea-bordered w-full mb-3" name="notes"></textarea>
+  <textarea class="textarea textarea-bordered w-full mb-3" bind:value={notes} name="notes"></textarea>
 
   <label for="visibility" class="mb-1 text-xs">Tags(comma separated)</label>
-  <input type="text" name="tags" class="input input-bordered w-full mb-3" spellcheck="false" />
+  <input type="text" name="tags" bind:value={tags} class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
-  <select class="select select-bordered w-full mb-8" name="visibility" required>
+  <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility" required>
     <option selected value={Visibility.public}>Public</option>
     <option value={Visibility.private}>Private</option>
   </select>
