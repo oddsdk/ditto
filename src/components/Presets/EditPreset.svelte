@@ -13,10 +13,6 @@
   let visibility: Visibility = preset?.visibility
 
   const handleSubmit = async (): Promise<void> => {
-    console.log('name', name)
-    console.log('notes', notes)
-    console.log('tags', tags)
-    console.log('visibility', visibility)
     const updatedPreset: Patch = {
       ...preset,
       name,
@@ -57,8 +53,8 @@
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
   <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility">
-    <option selected={preset?.visibility === Visibility.public} value={Visibility.public}>Public</option>
-    <option selected={preset?.visibility === Visibility.private} value={Visibility.private}>Private</option>
+    <option value={Visibility.public}>Public</option>
+    <option value={Visibility.private}>Private</option>
   </select>
 
   <div class="flex items-center justify-end gap-4">
