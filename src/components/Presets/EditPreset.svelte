@@ -19,7 +19,7 @@
       tags: (data.get('tags') ? data.get('tags')?.split(',')?.map((tag: string) => tag.trim()) : preset.tags) as string[],
       visibility: (data.get('visibility') || preset.visibility) as Visibility,
     }
-    console.log('updatedPreset', updatedPreset)
+
     await savePreset(updatedPreset)
 
     // Parse tags as categories from presets
