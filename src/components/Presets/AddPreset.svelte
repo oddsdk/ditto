@@ -22,7 +22,7 @@
         feedback: 0,
         mix: 50
       },
-      tags: tags ? tags?.split(',')?.map((tag: string) => tag.trim()) : [],
+      tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
       version,
       visibility,
     }

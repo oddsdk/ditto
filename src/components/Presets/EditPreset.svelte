@@ -16,7 +16,7 @@
       ...preset,
       name,
       notes,
-      tags: tags?.split(',')?.map((tag: string) => tag.trim()),
+      tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
       visibility: visibility,
     }
 
