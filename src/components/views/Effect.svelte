@@ -6,6 +6,7 @@
   import { objectEntries, translateToRange } from '$lib/utils.js'
   import type { Channels, Params } from '$lib/audio'
   import type { Patch } from '$lib/patch'
+  import { savePreset } from '$lib/presets'
   import Knob from '$components/controls/Knob.svelte'
 
   export let input: Channels
@@ -77,6 +78,10 @@
     patchStore.set(patch)
   }
 
+  const handleSavePatch = async (): Promise<void> => {
+    await savePreset(patch)
+  }
+
   $: {
     const feedback = translateToRange({
       num: patch.params.feedback,
@@ -100,20 +105,22 @@
     )
   }
 </script>
-
-<div class="grid grid-flow-col auto-cols-max gap-2">
-  {#each objectEntries(params) as [id, param]}
-    <Knob
-      {id}
-      label={param.label}
-      value={patch.params[id]}
-      min={param.min}
-      max={param.max}
-      unitLabel={param.unitLabel}
-      selected={selectedParam === id}
-      on:mousedown={selectParam}
-      on:mouseup={unselectParam}
-      on:input={setParam}
-    />
-  {/each}
+<div class="flex flex-col items-center justify-center gap-8 min-h-[calc(100vh-150px)]">
+  <div class="grid-container grid grid-cols-3 gap-4 mx-auto">
+    {#each objectEntries(params) as [id, param]}
+      <Knob
+        {id}
+        label={param.label}
+        value={patch.params[id]}
+        min={param.min}
+        max={param.max}
+        unitLabel={param.unitLabel}
+        selected={selectedParam === id}
+        on:mousedown={selectParam}
+        on:mouseup={unselectParam}
+        on:input={setParam}
+      />
+    {/each}
+    <button on:click={handleSavePatch} class="col-end-3 btn btn-secondary btn-xs">Save changes</button>
+  </div>
 </div>
