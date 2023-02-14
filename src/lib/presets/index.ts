@@ -1,6 +1,7 @@
 import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
-import { localOnlyFsStore, presetsStore } from '../../stores'
+
+import { fileSystemStore, presetsStore } from '../../stores'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
 
@@ -14,26 +15,27 @@ export type Presets = {
 /**
  * Load patches from either a public or private file system
  *
- * @param visibility Visibility : ;
- * @returns Promis<Patch[]>
+ * @param visibility Visibility
+ * @returns Promise<Patch[]>
  */
 export const loadFromFilesystem: (visibility: Visibility) => Promise<Patch[]> = async (visibility) => {
-  const localOnlyFs = getStore(localOnlyFsStore)
-  const directoryExists = await localOnlyFs?.exists(PRESETS_DIRS[visibility])
+  const fs = getStore(fileSystemStore)
+  const directoryExists = await fs?.exists(PRESETS_DIRS[visibility])
   if (!directoryExists) {
     return []
   }
 
-  const privateLinksObject = await localOnlyFs?.ls(PRESETS_DIRS[visibility])
-  if (!privateLinksObject) {
+
+  const linksObject = await fs?.ls(PRESETS_DIRS[visibility])
+  if (!linksObject) {
     return []
   }
 
-  // convert private links object to a list
-  const links = Object.entries(privateLinksObject)
+  // convert links object to a list
+  const links = Object.entries(linksObject)
 
   const data = await Promise.all(links.map(async ([name, _]) =>
-    JSON.parse(new TextDecoder().decode(await localOnlyFs?.read(
+    JSON.parse(new TextDecoder().decode(await fs?.read(
       webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(name))
     ))) as Patch
   ))
@@ -50,12 +52,8 @@ export const hydratePresetsStore = async () => {
   const privatePresets = await loadFromFilesystem(Visibility.private)
   const presets = [DEFAULT_PATCH, ...publicPresets, ...privatePresets].sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
 
-  // Parse tags as categories from presets
-  const categories = [...DEFAULT_CATEGORIES]
-  presets.forEach(({ tags }) => tags.forEach((tag) => categories.push(tag)))
-
   presetsStore.set({
-    categories,
+    categories: deriveCategoriesFromPresets(presets),
     presets,
     selectedCategory: DEFAULT_CATEGORIES[0],
     selectedPatch: DEFAULT_PATCH.id,
@@ -86,7 +84,7 @@ const addOrUpdate = (arr: Patch[], element: Patch): Patch[] => {
  * @param preset Patch
  */
 export const savePreset = async (preset: Patch) => {
-  const localOnlyFs = getStore(localOnlyFsStore)
+  const localOnlyFs = getStore(fileSystemStore)
   const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
 
   await localOnlyFs?.write(
@@ -105,4 +103,39 @@ export const savePreset = async (preset: Patch) => {
   )) as Patch
 
   console.log('saved preset', storedPreset)
+}
+
+/**
+ * Parse tags as categories from presets
+ *
+ * @param presets Patch[]
+ */
+export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
+  const categories = [...DEFAULT_CATEGORIES]
+
+  presets.forEach(({ tags }) => tags.forEach((tag) => {
+    const lowerCaseTag = tag.toLowerCase()
+    if (!categories.includes(lowerCaseTag)) categories.push(lowerCaseTag)
+  }))
+
+  return categories
+}
+
+/**
+ * Store patches to either a public or private file system
+ *
+ * @param presets Presets to store
+ * @param visibility Visibility
+ * @returns Promise<Patch[]>
+ */
+export const storeToFilesystem: (presets: Patch[], visibility: Visibility) => Promise<void> = async (presets, visibility) => {
+  const fs = getStore(fileSystemStore)
+
+  await Promise.all(presets.map(async preset => {
+    await fs?.write(
+      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(`${preset.id}.json`)),
+      new TextEncoder().encode(JSON.stringify(preset))
+      )
+  }))
+  await fs?.publish()
 }

@@ -2,8 +2,7 @@
   import { version } from '../../../package.json'
   import { patchStore, presetsStore } from '../../stores'
   import { type Patch, Visibility } from '$lib/patch'
-  import { savePreset } from '$lib/presets'
-  import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
+  import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
 
   export let handleCancelClick: () => void
 
@@ -23,20 +22,18 @@
         feedback: 0,
         mix: 50
       },
-      tags: tags ? tags?.split(',')?.map((tag: string) => tag.trim()) : [],
+      tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
       version,
       visibility,
     }
 
     await savePreset(preset)
 
-    // Parse tags as categories from presets
-    const categories = [...DEFAULT_CATEGORIES]
     presetsStore.update(state => {
-      state.presets.forEach(({ tags }) => tags.forEach((tag) => categories.push(tag)))
       return {
         ...state,
-        categories,
+        // Parse tags as categories from presets
+        categories: deriveCategoriesFromPresets(state.presets),
         selectedPatch: preset.id,
       }
     })
