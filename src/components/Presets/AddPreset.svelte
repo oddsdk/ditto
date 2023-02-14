@@ -52,16 +52,16 @@
 
 <form on:submit={handleSubmit}>
   <label for="name" class="mb-1 text-xs">Name</label>
-  <input type="text" name="name" class="input input-bordered w-full mb-3" required />
+  <input type="text" name="name" class="input input-bordered w-full mb-3" spellcheck="false" required />
 
   <label for="name" class="mb-1 text-xs">Creator</label>
-  <input type="text" name="creator" class="input input-bordered w-full mb-3" required />
+  <input type="text" name="creator" class="input input-bordered w-full mb-3" spellcheck="false" required />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
   <textarea class="textarea textarea-bordered w-full mb-3" name="notes"></textarea>
 
   <label for="visibility" class="mb-1 text-xs">Tags(comma separated)</label>
-  <input type="text" name="tags" class="input input-bordered w-full mb-3" />
+  <input type="text" name="tags" class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
   <select class="select select-bordered w-full mb-8" name="visibility" required>
