@@ -12,7 +12,7 @@
     const data: FormData = new FormData(formEl)
 
     const preset: Patch = {
-      creator: data.get('creator') as string,
+      creator: null,
       favorite: false,
       id: crypto.randomUUID(),
       name: data.get('name') as string,
@@ -53,9 +53,6 @@
 <form on:submit={handleSubmit}>
   <label for="name" class="mb-1 text-xs">Name</label>
   <input type="text" name="name" class="input input-bordered w-full mb-3" spellcheck="false" required />
-
-  <label for="name" class="mb-1 text-xs">Creator</label>
-  <input type="text" name="creator" class="input input-bordered w-full mb-3" spellcheck="false" required />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
   <textarea class="textarea textarea-bordered w-full mb-3" name="notes"></textarea>

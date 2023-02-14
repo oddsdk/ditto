@@ -14,7 +14,9 @@
     <button on:click={handleEditClick} class="absolute top-0 right-0"><Edit /></button>
   {/if}
 
-  <h3 class="text-sm title-font text-gray-500 tracking-widest">{preset?.creator}</h3>
+  {#if preset?.creator}
+    <h3 class="text-sm title-font text-gray-500 tracking-widest">{preset.creator}</h3>
+  {/if}
   <h4 class="text-gray-900 text-3xl title-font font-medium mb-1">{preset?.name}</h4>
 
   <div class="flex items-center mb-4">

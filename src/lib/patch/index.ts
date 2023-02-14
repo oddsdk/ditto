@@ -9,7 +9,7 @@ export enum Visibility {
 export type Patch = {
   version: string
   id: string
-  creator: string
+  creator?: string
   favorite: boolean
   params: { [Property in keyof Params]: number }
   name: string
