@@ -100,20 +100,22 @@
     )
   }
 </script>
-
-<div class="grid grid-flow-col auto-cols-max gap-2">
-  {#each objectEntries(params) as [id, param]}
-    <Knob
-      {id}
-      label={param.label}
-      value={patch.params[id]}
-      min={param.min}
-      max={param.max}
-      unitLabel={param.unitLabel}
-      selected={selectedParam === id}
-      on:mousedown={selectParam}
-      on:mouseup={unselectParam}
-      on:input={setParam}
-    />
-  {/each}
+<div class="flex flex-col items-center justify-center min-h-[calc(100vh-150px)] gap-8">
+  <h2 class="text-xl">{patch.name}</h2>
+  <div class="grid grid-flow-col auto-cols-max gap-4 mx-auto">
+    {#each objectEntries(params) as [id, param]}
+      <Knob
+        {id}
+        label={param.label}
+        value={patch.params[id]}
+        min={param.min}
+        max={param.max}
+        unitLabel={param.unitLabel}
+        selected={selectedParam === id}
+        on:mousedown={selectParam}
+        on:mouseup={unselectParam}
+        on:input={setParam}
+      />
+    {/each}
+  </div>
 </div>

@@ -38,7 +38,6 @@ export const loadFromFilesystem: (visibility: Visibility) => Promise<Patch[]> = 
     ))) as Patch
   ))
 
-  console.log('data', data)
   return data
 }
 
@@ -98,7 +97,7 @@ export const savePreset = async (preset: Patch) => {
 
   presetsStore.update((state) => ({
     ...state,
-    presets: addOrUpdate(state.presets, preset),
+    presets: addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'})),
   }))
 
   const storedPreset = JSON.parse(new TextDecoder().decode(

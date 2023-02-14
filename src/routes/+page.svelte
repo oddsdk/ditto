@@ -43,7 +43,7 @@
 </script>
 
 {#if input}
-  <div class="grid grid-flow-row auto-rows-max gap-5 px-5 py-5">
+  <div class="grid grid-flow-row auto-rows-max gap-5 px-5 py-5 min-h-screen">
     <div class="grid grid-flow-col auto-cols w-full pl-4">
       <h2 class="text-2xl font-mono">Ditto</h2>
       {#if view === 'effect'}
