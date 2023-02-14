@@ -52,12 +52,8 @@ export const hydratePresetsStore = async () => {
   const privatePresets = await loadFromFilesystem(Visibility.private)
   const presets = [DEFAULT_PATCH, ...publicPresets, ...privatePresets].sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
 
-  // Parse tags as categories from presets
-  const categories = [...DEFAULT_CATEGORIES]
-  presets.forEach(({ tags }) => tags.forEach((tag) => categories.push(tag)))
-
   presetsStore.set({
-    categories,
+    categories: deriveCategoriesFromPresets(presets),
     presets,
     selectedCategory: DEFAULT_CATEGORIES[0],
     selectedPatch: DEFAULT_PATCH.id,
@@ -110,8 +106,24 @@ export const savePreset = async (preset: Patch) => {
 }
 
 /**
+ * Parse tags as categories from presets
+ *
+ * @param presets Patch[]
+ */
+export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
+  const categories = [...DEFAULT_CATEGORIES]
+
+  presets.forEach(({ tags }) => tags.forEach((tag) => {
+    const lowerCaseTag = tag.toLowerCase()
+    if (!categories.includes(lowerCaseTag)) categories.push(lowerCaseTag)
+  }))
+
+  return categories
+}
+
+/**
  * Store patches to either a public or private file system
- * 
+ *
  * @param presets Presets to store
  * @param visibility Visibility
  * @returns Promise<Patch[]>
