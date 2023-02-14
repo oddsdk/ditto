@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as webnative from 'webnative'
-  import { createEventDispatcher } from 'svelte'
 
   import { fileSystemStore, programStore, sessionStore } from '../../../stores'
   import {
@@ -10,8 +9,6 @@
   import { usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
   import { Visibility } from '$lib/patch'
-
-  const dispatch = createEventDispatcher()
 
   let program: Program | null = $programStore
 
@@ -73,8 +70,6 @@
           } else {
             console.error('File system missing on session at registration')
           }
-
-          dispatch('register', { username: session.username })
         } else {
           console.error('Session failed to load after registration')
         }

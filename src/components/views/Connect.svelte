@@ -30,13 +30,17 @@
     authStrategy = auth.authStrategy
     session = auth.session
 
-    //   /** Initialize connect view
-    //    *
-    //    * If a session exists, the user has already registered.
-    //    * Check to see if they have connected to the web companion
-    //    * app. If they have, show the connected view. Otherwise,
-    //    * initiate account linking and show the link view.
-    //    */
+    /** Initialize connect view
+     *
+     * If a session exists, the user has already registered.
+     * Check to see if they have connected to the web companion
+     * app. If they have, show the connected view. Otherwise,
+     * initiate account linking and show the link view.
+     *
+     * Note that when the user registers, the auth store is
+     * updated with a session and a connected status set to false.
+     * We re-run this check and load the 'link' view.
+     */
     if (session) {
       username = session.username
 
@@ -52,13 +56,6 @@
       view = 'register'
     }
   })
-
-  async function link(event: CustomEvent<{ username: string }>) {
-    username = event.detail.username
-
-    await initAccountLinkingProducer(username)
-    view = 'link'
-  }
 
   function handleLinkingCanceled() {
     if (accountLinkingProducer) accountLinkingProducer.cancel()
@@ -107,7 +104,7 @@
 
 <div class="grid grid-flow-row auto-rows px-4">
   {#if view === 'register'}
-    <Register on:register={link} />
+    <Register />
   {:else if view === 'link'}
     <Link {username} />
   {:else if view === 'confirm-pin'}
