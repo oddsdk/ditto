@@ -42,6 +42,8 @@
       selectedPatch: id,
     }))
 
+    selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
+
     patchStore.update(() => ({ ...selectedPreset as Patch }))
 
     adding = false
@@ -59,11 +61,11 @@
   <input type="text" placeholder="Search presets" class="col-span-1 w-full text-sm rounded h-10 py-3 px-4 focus:outline-none" />
 </div> -->
 <div class="grid-container grid grid-cols-3 mt-2 mb-2">
-  <h4 class="col-span-1 pl-8 py-3">Categories</h4>
-  <h4 class="col-span-1 pl-10 py-3 flex items-center justify-between">Presets <button on:click={handleAddPresetClick} class="btn btn-secondary btn-xs">Add Preset</button></h4>
-  <h4 class="col-span-1 pl-7 py-3">Preset Info</h4>
+  <h4 class="col-span-1 pl-8 py-3 text-lg">Categories</h4>
+  <h4 class="col-span-1 pl-10 py-3 text-lg flex items-center justify-between">Presets <button on:click={handleAddPresetClick} class="btn btn-secondary btn-xs">Add Preset</button></h4>
+  <h4 class="col-span-1 pl-7 py-3 text-lg">Preset Info</h4>
 </div>
-<div class="grid-container grid grid-cols-3 divide-x-2 min-h-[calc(100vh-180px)] gap-4">
+<div class="grid-container grid grid-cols-3 divide-x-2 min-h-[calc(100vh-220px)] gap-4">
 
   <div class="col-span-1 px-4">
     <div class="w-full">
@@ -98,32 +100,3 @@
   </div>
 </div>
 
-
-
-<!-- <div class="bg-gray-50 min-h-screen flex items-center justify-center px-16">
-  <div class="relative w-full max-w-lg">
-    <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob "></div>
-    <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-32 left-20 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-    <div class="m-8 relative space-y-4">
-      <div class="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
-        <div class="flex-1 flex justify-between items-center">
-          <div class="h-4 w-48 bg-gray-300 rounded"></div>
-          <div class="w-24 h-6 rounded-lg bg-purple-300"></div>
-        </div>
-      </div>
-      <div class="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
-        <div class="flex-1 flex justify-between items-center">
-          <div class="h-4 w-48 bg-gray-300 rounded"></div>
-          <div class="w-24 h-6 rounded-lg bg-purple-300"></div>
-        </div>
-      </div>
-      <div class="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
-        <div class="flex-1 flex justify-between items-center">
-          <div class="h-4 w-48 bg-gray-300 rounded"></div>
-          <div class="w-24 h-6 rounded-lg bg-purple-300"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

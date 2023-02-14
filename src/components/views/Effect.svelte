@@ -100,8 +100,7 @@
     )
   }
 </script>
-<div class="flex flex-col items-center justify-center min-h-[calc(100vh-150px)] gap-8">
-  <h2 class="text-xl">{patch.name}</h2>
+<div class="flex flex-col items-center justify-center min-h-[calc(100vh-150px)]">
   <div class="grid grid-flow-col auto-cols-max gap-4 mx-auto">
     {#each objectEntries(params) as [id, param]}
       <Knob
