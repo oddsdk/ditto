@@ -1,12 +1,15 @@
 import type * as webnative from 'webnative'
 import { derived, writable, type Readable, type Writable } from 'svelte/store'
 
+import type { Notification } from '$lib/notifications'
 import { DEFAULT_PATCH, type Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 import type { Session } from '$lib/auth/session'
 import type { Presets } from '$lib/presets'
 
 export const fileSystemStore: Writable<webnative.FileSystem | null> = writable(null)
+
+export const notificationStore: Writable<Notification[]> = writable([])
 
 export const patchStore: Writable<Patch> = writable(DEFAULT_PATCH)
 
