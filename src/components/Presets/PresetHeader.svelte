@@ -10,13 +10,13 @@
   const dispatch = createEventDispatcher()
 
   const handleClick = () => {
-    // dispatch('click', { view: 'presets' })
-    addNotification('A notification', 'success')
+    dispatch('click', { view: 'presets' })
   }
 </script>
 
 <div class="relative flex flex-col gap-2 min-w-[300px] items-center justify-center p-2 rounded border-2 border-secondary">
   <Notifications />
+
   <h3 class="text-lg"><button on:click={handleClick}>{$patchStore.name}</button></h3>
 
   <div class="flex w-full mt-auto justify-between">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { version } from '../../../package.json'
   import { patchStore, presetsStore } from '../../stores'
+  import { addNotification } from '$lib/notifications'
   import { type Patch, Visibility } from '$lib/patch'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
 
@@ -43,6 +44,8 @@
 
     // Leave the edit view
     handleCancelClick()
+
+    addNotification('Preset created', 'success')
   }
 </script>
 

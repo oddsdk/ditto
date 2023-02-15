@@ -6,7 +6,7 @@
 </script>
 
 {#if $notificationStore.length}
-  <div class="flex flex-col justify-center">
+  <div class="absolute top-0 right-0 bottom-0 left-0 z-20 bg-base-100 flex flex-col justify-center">
     {#each $notificationStore as notification (notification.id)}
       <div animate:flip>
         <Notification {notification} />
