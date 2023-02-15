@@ -128,6 +128,8 @@
         on:input={setParam}
       />
     {/each}
-    <button on:click={handleSavePatch} class="col-end-3 btn btn-secondary btn-xs">Save changes</button>
+    {#if patch.id !== 'default'}
+      <button on:click={handleSavePatch} class="col-end-3 btn btn-secondary btn-xs">Save changes</button>
+    {/if}
   </div>
 </div>

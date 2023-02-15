@@ -111,14 +111,16 @@ export const savePreset = async (preset: Patch) => {
  * @param presets Patch[]
  */
 export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
-  const categories = [...DEFAULT_CATEGORIES]
+  const categories: string[] = []
 
   presets.forEach(({ tags }) => tags.forEach((tag) => {
     const lowerCaseTag = tag.toLowerCase()
     if (!categories.includes(lowerCaseTag)) categories.push(lowerCaseTag)
   }))
 
-  return categories
+   categories.sort((a, b) => a.localeCompare(b, 'en', {'sensitivity': 'base'}))
+
+  return [...DEFAULT_CATEGORIES, ...categories]
 }
 
 /**

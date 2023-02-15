@@ -66,8 +66,8 @@
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
   <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility" required>
-    <option selected value={Visibility.public}>Public</option>
-    <option value={Visibility.private}>Private</option>
+    <option selected value={Visibility.private}>Private</option>
+    <option value={Visibility.public}>Public</option>
   </select>
 
   <div class="flex items-center justify-end gap-4">
