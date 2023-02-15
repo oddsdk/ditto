@@ -106,6 +106,26 @@ export const savePreset = async (preset: Patch) => {
 }
 
 /**
+ * Delete preset from the file system and remove it from the preset list
+ *
+ * @param preset Patch
+ */
+export const deletePreset = async (preset: Patch) => {
+  const fs = getStore(fileSystemStore)
+  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
+
+  await fs?.rm(contentPath)
+
+  await fs?.publish()
+
+  presetsStore.update((state) => ({
+    ...state,
+    presets: state.presets.filter(({ id }) => id !== preset.id),
+    selectedPatch: DEFAULT_PATCH.id,
+  }))
+}
+
+/**
  * Parse tags as categories from presets
  *
  * @param presets Patch[]

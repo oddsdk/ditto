@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Patch } from '$lib/patch'
+  import Delete from '$components/icons/Delete.svelte'
   import Edit from '$components/icons/Edit.svelte'
   import Favorite from '$components/icons/Favorite.svelte'
 
@@ -9,9 +10,12 @@
   $: isDefault = preset.id === 'default'
 </script>
 
-<div class="relative">
+<div class="relative pt-6">
   {#if !isDefault}
-    <button on:click={handleEditClick} class="absolute top-0 right-0"><Edit /></button>
+    <div class="absolute top-0 right-0 flex gap-4">
+      <button on:click={handleEditClick}><Edit /></button>
+      <Delete {preset} />
+    </div>
   {/if}
 
   {#if preset?.creator}

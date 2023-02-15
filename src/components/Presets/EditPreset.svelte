@@ -46,7 +46,7 @@
   }
 </script>
 
-<form on:submit={handleSubmit}>
+<form on:submit={handleSubmit} class="relative">
   <label for="name" class="mb-1 text-xs">Name</label>
   <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" />
 
