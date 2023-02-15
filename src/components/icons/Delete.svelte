@@ -4,7 +4,6 @@
   import { deletePreset } from '$lib/presets'
 
   export let preset: Patch
-  export let handleCancelClick: () => void
   let loading = false
 
   // Delete the current preset
@@ -12,7 +11,6 @@
     loading = true
     try {
       await deletePreset(preset)
-      handleCancelClick()
       addNotification('Preset deleted', 'success')
     } catch (error) {
       console.error(error)

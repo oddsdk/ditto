@@ -1,6 +1,5 @@
 <script lang="ts">
   import { patchStore, presetsStore } from '../../stores'
-  import Delete from '$components/icons/Delete.svelte'
   import { addNotification } from '$lib/notifications'
   import { type Patch, Visibility } from '$lib/patch'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
@@ -47,11 +46,7 @@
   }
 </script>
 
-<form on:submit={handleSubmit} class="relative pt-5">
-  <div class="absolute top-0 right-0">
-    <Delete {handleCancelClick} {preset} />
-  </div>
-
+<form on:submit={handleSubmit} class="relative">
   <label for="name" class="mb-1 text-xs">Name</label>
   <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" />
 
