@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte'
 
   import { patchStore } from '../../stores'
-  import { addNotification } from '$lib/notifications'
   import ArrowLeft from '$components/icons/ArrowLeft.svelte'
   import ArrowRight from '$components/icons/ArrowRight.svelte'
   import Notifications from '$components/notifications/Notifications.svelte'
