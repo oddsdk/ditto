@@ -1,4 +1,6 @@
 <script lang="ts">
+  import {  onDestroy } from 'svelte'
+
   import { patchStore, presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
   import AddPreset from '$components/presets/AddPreset.svelte'
@@ -10,7 +12,12 @@
   let adding = false
   let editing = false
   let presets = $presetsStore.presets
-  $: selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
+  let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
+
+  const unsubscribePresetsStore = presetsStore.subscribe((state) => {
+    selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
+    presets = state.presets
+  })
 
   // Update the selectedCategory and load the associated presets column
   const handleCategoryClick = (category: string): void => {
@@ -46,7 +53,7 @@
 
     selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
 
-    patchStore.update(() => ({ ...selectedPreset as Patch }))
+    patchStore.update(() => ({ ...selectedPreset  }))
 
     adding = false
     editing = false
@@ -70,6 +77,8 @@
 
   // Toggle edit view
   const handleEditClick = () => editing = !editing
+
+  onDestroy(unsubscribePresetsStore)
 </script>
 
 <div class="grid-container grid grid-cols-3 mt-2 mb-2">
