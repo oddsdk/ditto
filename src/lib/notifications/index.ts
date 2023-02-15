@@ -24,8 +24,7 @@ export const addNotification: (
   const id = crypto.randomUUID()
 
   // adding new notifications to the bottom of the list so they stack from bottom to top
-  notificationStore.update(rest => [
-    ...rest,
+  notificationStore.update(() => [
     {
       id,
       msg,
