@@ -60,6 +60,8 @@
   function setParam(
     event: CustomEvent<{ id: keyof typeof params; value: number }>
   ) {
+    if (selectedParam === null) return
+
     const { id, value } = event.detail
 
     switch (id) {
