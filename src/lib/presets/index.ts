@@ -118,7 +118,7 @@ export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
     if (!categories.includes(lowerCaseTag)) categories.push(lowerCaseTag)
   }))
 
-  return categories
+  return categories.sort((a, b) => a.localeCompare(b, 'en', {'sensitivity': 'base'}))
 }
 
 /**

@@ -4,6 +4,7 @@
   import AddPreset from '$components/presets/AddPreset.svelte'
   import EditPreset from '$components/presets/EditPreset.svelte'
   import PresetInfo from '$components/presets/PresetInfo.svelte'
+  import ClearSearch from '$components/icons/ClearSearch.svelte'
 
   let isSearching = false
   let adding = false
@@ -52,10 +53,16 @@
   }
 
   // Filter presets based on a search parameter
+  let searchTerm = ''
   const handlePresetSearch = (event: Event): void => {
     const { value } = event.target as HTMLInputElement
-    console.log('value', value)
+    isSearching = !!value.length
     presets = $presetsStore.presets.filter(({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+  }
+  const clearSearch = () => {
+    isSearching = false
+    presets = $presetsStore.presets
+    searchTerm = ''
   }
 
   // Handle "Add Preset" button click
@@ -75,7 +82,12 @@
 
   <div class="col-span-1 px-4">
     <div class="w-full">
-      <input on:input={handlePresetSearch} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 transition-colors rounded h-10 py-3 px-4 mb-2 focus:border-secondary focus:outline-none" />
+      <div class="relative w-full mb-2">
+        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 transition-colors rounded h-10 py-3 pl-4 pr-8 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
+        {#if isSearching}
+          <ClearSearch {clearSearch} />
+        {/if}
+      </div>
 
       {#each $presetsStore.categories as category}
         <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-sm {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
@@ -92,6 +104,10 @@
           <h5>{preset.name}</h5>
         </button>
       {/each}
+
+      {#if isSearching && !presets.length}
+        <h5 class="text-center text-sm pt-8">No search results</h5>
+      {/if}
     </div>
   </div>
 
