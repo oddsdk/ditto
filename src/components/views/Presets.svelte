@@ -1,9 +1,9 @@
 <script lang="ts">
   import { patchStore, presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
-  import AddPreset from '$components/Presets/AddPreset.svelte'
-  import EditPreset from '$components/Presets/EditPreset.svelte'
-  import PresetInfo from '$components/Presets/PresetInfo.svelte'
+  import AddPreset from '$components/presets/AddPreset.svelte'
+  import EditPreset from '$components/presets/EditPreset.svelte'
+  import PresetInfo from '$components/presets/PresetInfo.svelte'
 
   let adding = false
   let editing = false
