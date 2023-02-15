@@ -57,9 +57,6 @@
   const handleEditClick = () => editing = !editing
 </script>
 
-<!-- <div class="grid-container grid grid-cols-3">
-  <input type="text" placeholder="Search presets" class="col-span-1 w-full text-sm rounded h-10 py-3 px-4 focus:outline-none" />
-</div> -->
 <div class="grid-container grid grid-cols-3 mt-2 mb-2">
   <h4 class="col-span-1 pl-8 py-3 text-lg">Categories</h4>
   <h4 class="col-span-1 pl-10 py-3 text-lg flex items-center justify-between">Presets <button on:click={handleAddPresetClick} class="btn btn-secondary btn-xs">Add Preset</button></h4>
@@ -69,6 +66,7 @@
 
   <div class="col-span-1 px-4">
     <div class="w-full">
+      <input type="text" placeholder="Search presets" class="w-full text-sm bg-base-100 border-2 border-neutral rounded h-10 py-3 px-4 mb-2 focus:outline-none" />
       {#each $presetsStore.categories as category}
         <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-sm {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
           <h5>{category}</h5>
