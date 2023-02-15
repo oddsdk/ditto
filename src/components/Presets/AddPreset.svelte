@@ -13,39 +13,44 @@
   let visibility: Visibility
 
   const handleSubmit = async (): Promise<void> => {
-    const preset: Patch = {
-      favorite: false,
-      id: crypto.randomUUID(),
-      name,
-      notes,
-      params: {
-        delayTime: 200,
-        feedback: 0,
-        mix: 50
-      },
-      tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
-      version,
-      visibility,
-    }
-
-    await savePreset(preset)
-
-    presetsStore.update(state => {
-      return {
-        ...state,
-        // Parse tags as categories from presets
-        categories: deriveCategoriesFromPresets(state.presets),
-        selectedPatch: preset.id,
+    try {
+      const preset: Patch = {
+        favorite: false,
+        id: crypto.randomUUID(),
+        name,
+        notes,
+        params: {
+          delayTime: 200,
+          feedback: 0,
+          mix: 50
+        },
+        tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
+        version,
+        visibility,
       }
-    })
 
-    // Load the new patch into the patchStore
-    patchStore.update(() => ({ ...preset }))
+      await savePreset(preset)
 
-    // Leave the edit view
-    handleCancelClick()
+      presetsStore.update(state => {
+        return {
+          ...state,
+          // Parse tags as categories from presets
+          categories: deriveCategoriesFromPresets(state.presets),
+          selectedPatch: preset.id,
+        }
+      })
 
-    addNotification('Preset created', 'success')
+      // Load the new patch into the patchStore
+      patchStore.update(() => ({ ...preset }))
+
+      // Leave the edit view
+      handleCancelClick()
+
+      addNotification('Patch created', 'success')
+    } catch (error) {
+      addNotification('Failed to create patch', 'error')
+      console.error(error)
+    }
   }
 </script>
 

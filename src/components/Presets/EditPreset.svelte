@@ -13,31 +13,36 @@
   let visibility: Visibility = preset?.visibility
 
   const handleSubmit = async (): Promise<void> => {
-    const updatedPreset: Patch = {
-      ...preset,
-      name,
-      notes,
-      tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
-      visibility: visibility,
-    }
-
-    await savePreset(updatedPreset)
-
-    presetsStore.update(state => {
-      return {
-        ...state,
-        // Parse tags as categories from presets
-        categories: deriveCategoriesFromPresets(state.presets),
+    try {
+      const updatedPreset: Patch = {
+        ...preset,
+        name,
+        notes,
+        tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
+        visibility: visibility,
       }
-    })
 
-    // Load the new patch into the patchStore
-    patchStore.update(() => ({ ...updatedPreset }))
+      await savePreset(updatedPreset)
 
-    // Leave the edit view
-    handleCancelClick()
+      presetsStore.update(state => {
+        return {
+          ...state,
+          // Parse tags as categories from presets
+          categories: deriveCategoriesFromPresets(state.presets),
+        }
+      })
 
-    addNotification('Preset updated', 'success')
+      // Load the new patch into the patchStore
+      patchStore.update(() => ({ ...updatedPreset }))
+
+      // Leave the edit view
+      handleCancelClick()
+
+      addNotification('Patch updated', 'success')
+    } catch (error) {
+      addNotification('Failed to update patch', 'error')
+      console.error(error)
+    }
   }
 </script>
 

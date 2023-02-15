@@ -5,6 +5,7 @@
   import { patchStore } from '../../stores.js'
   import { objectEntries, translateToRange } from '$lib/utils.js'
   import type { Channels, Params } from '$lib/audio'
+  import { addNotification } from '$lib/notifications'
   import type { Patch } from '$lib/patch'
   import { savePreset } from '$lib/presets'
   import Knob from '$components/controls/Knob.svelte'
@@ -79,7 +80,13 @@
   }
 
   const handleSavePatch = async (): Promise<void> => {
-    await savePreset(patch)
+    try {
+      await savePreset(patch)
+      addNotification('Patch updated', 'success')
+    } catch (error) {
+      addNotification('Failed to update patch', 'error')
+      console.error(error)
+    }
   }
 
   $: {
