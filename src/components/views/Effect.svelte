@@ -40,20 +40,6 @@
 
   const unsubscribePatchStore = patchStore.subscribe(val => {
     patch = val
-    // console.log('valu', val)
-    // console.log('$presetsStore.presets', $presetsStore.presets)
-    // const match = $presetsStore.presets.find(({ id }) => id === patch.id)
-    // if (match) {
-    //   associatedPreset = Object.keys(match).reduce(function(c,k){c[k]=(match )[k];return c},{})
-    // }
-
-    // if (match) {
-    //   associatedPreset = JSON.parse(JSON.stringify(match)) as Patch
-    // }
-  })
-
-  presetsStore.subscribe((state) => {
-    console.log('state', state)
   })
 
   onDestroy(unsubscribePatchStore)
@@ -122,10 +108,6 @@
     // Check if the patch params have been modified from the original preset
     const associatedPreset = $presetsStore.presets.find(({ id }) => id === patch.id)
     unsavedChanges = (associatedPreset?.params.delayTime !== patch.params.delayTime) || (associatedPreset?.params.feedback !== patch.params.feedback) || (associatedPreset?.params.mix !== patch.params.mix)
-    console.log('associatedPreset', associatedPreset)
-    console.log('associatedPreset?.params.delayTime', associatedPreset?.params.delayTime)
-    console.log('patch.params.delayTime', patch.params.delayTime)
-    console.log('unsavedChanges', unsavedChanges)
 
     render(
       process({
