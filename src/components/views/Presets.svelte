@@ -112,7 +112,7 @@
     <button on:click={handleAddPresetClick} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
   </div>
 
-  <div class="col-span-2 pt-5 px-6">
+  <div class="col-span-2 pt-5 px-6 bg-base-300">
     {#if adding}
       <AddPreset handleCancelClick={() => adding = false} />
     {:else}

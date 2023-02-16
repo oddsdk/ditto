@@ -91,6 +91,7 @@ export const savePreset = async (preset: Patch) => {
   const oppositeDirectory = preset.visibility === Visibility.private ? Visibility.public : Visibility.private
   const oppositeContentPath = webnative.path.combine(PRESETS_DIRS[oppositeDirectory], webnative.path.file(`${preset.id}.json`))
   if (fs?.exists(oppositeContentPath)) {
+    console.log('exists')
     await fs?.rm(
       oppositeContentPath
     )

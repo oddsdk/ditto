@@ -9,7 +9,7 @@
   export let handleCancelClick: () => void
 
   let name: string = preset?.name
-  let notes: string = preset?.notes
+  let notes: string = preset?.notes || ''
   let tags: string = preset?.tags?.join(', ')
   let visibility: Visibility = preset?.visibility
 
@@ -55,7 +55,7 @@
   <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
-  <textarea class="textarea textarea-bordered w-full mb-3" name="notes" value={preset?.notes}></textarea>
+  <textarea class="textarea textarea-bordered w-full mb-3" name="notes" bind:value={notes}></textarea>
 
   <label for="visibility" class="mb-1 text-xs">Tags(comma separated)</label>
   <input type="text" name="tags" bind:value={tags} class="input input-bordered w-full mb-3" spellcheck="false" />
