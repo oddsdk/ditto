@@ -84,7 +84,7 @@
   onDestroy(unsubscribePresetsStore)
 </script>
 
-<div class="grid-container grid grid-cols-8 divide-x h-[calc(100vh-89px)]">
+<div class="grid-container grid grid-cols-8 divide-x h-full-no-header">
 
   <div class="col-span-1 pt-6 pr-4">
     <div class="w-full">

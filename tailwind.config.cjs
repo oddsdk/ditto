@@ -72,6 +72,9 @@ module.exports = {
           },
         },
       },
+      height: {
+        'full-no-header': 'calc(100vh - 89px)',
+      },
     },
   },
 };
