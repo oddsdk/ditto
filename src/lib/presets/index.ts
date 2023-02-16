@@ -87,6 +87,15 @@ export const savePreset = async (preset: Patch) => {
   const fs = getStore(fileSystemStore)
   const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
 
+  // Check for duplicate preset in the opposite directory and remove it
+  const oppositeDirectory = preset.visibility === Visibility.private ? Visibility.public : Visibility.private
+  const oppositeContentPath = webnative.path.combine(PRESETS_DIRS[oppositeDirectory], webnative.path.file(`${preset.id}.json`))
+  if (fs?.exists(oppositeContentPath)) {
+    await fs?.rm(
+      oppositeContentPath
+    )
+  }
+
   await fs?.write(
     contentPath,
     new TextEncoder().encode(JSON.stringify(preset))
