@@ -1,5 +1,6 @@
 <script lang="ts">
   import { patchStore, presetsStore } from '../../stores'
+  import { getUsername } from '$lib/auth'
   import { addNotification } from '$lib/notifications'
   import { type Patch, Visibility } from '$lib/patch'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
@@ -16,6 +17,7 @@
     try {
       const updatedPreset: Patch = {
         ...preset,
+        creator: preset.creator ?? getUsername(),
         name,
         notes,
         tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
@@ -47,6 +49,8 @@
 </script>
 
 <form on:submit={handleSubmit} class="relative">
+  <h1 class="text-2xl font-bold mb-4">Edit Preset</h1>
+
   <label for="name" class="mb-1 text-xs">Name</label>
   <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" />
 
@@ -57,7 +61,7 @@
   <input type="text" name="tags" bind:value={tags} class="input input-bordered w-full mb-3" spellcheck="false" />
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
-  <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility">
+  <select class="select select-bordered w-full mb-6" bind:value={visibility} name="visibility">
     <option value={Visibility.public}>Public</option>
     <option value={Visibility.private}>Private</option>
   </select>

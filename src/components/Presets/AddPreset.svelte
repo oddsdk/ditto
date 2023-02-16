@@ -3,6 +3,7 @@
   import { patchStore, presetsStore } from '../../stores'
   import { addNotification } from '$lib/notifications'
   import { type Patch, Visibility } from '$lib/patch'
+  import { getUsername } from '$lib/auth'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
 
   export let handleCancelClick: () => void
@@ -15,6 +16,7 @@
   const handleSubmit = async (): Promise<void> => {
     try {
       const preset: Patch = {
+        creator: getUsername(),
         favorite: false,
         id: crypto.randomUUID(),
         name,
@@ -55,6 +57,8 @@
 </script>
 
 <form on:submit={handleSubmit}>
+  <h1 class="text-2xl font-bold mb-4">New Preset</h1>
+
   <label for="name" class="mb-1 text-xs">Name</label>
   <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" required />
 

@@ -22,6 +22,6 @@
 
 <svelte:window on:keydown={handleKeyDown}/>
 
-<button on:click={handlePreviousClick} class="absolute left-2 top-2">
+<button on:click={handlePreviousClick} class="">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4M16 12H8"/></svg>
 </button>

@@ -31,16 +31,17 @@ module.exports = {
         //   "--tab-radius": "3px"
         // },
         mytheme: {
-          // primary: "#1eafed",
-          primary: "#dba104",
-          secondary: "#71f2cb",
-          accent: "#f9bbd1",
-          neutral: "#241C30",
-          "base-100": "#EAEFF5",
-          info: "#5F9AE7",
-          success: "#64DD9F",
-          warning: "#BB750C",
-          error: "#E76765",
+          primary: "#e24a6e",
+          secondary: "#83f42c",
+          accent: "#c1e053",
+          neutral: "#1D2125",
+          "base-300": "#EAEFF5",
+          "base-200": "#FAFAFA",
+          "base-100": "#FFFFFF",
+          info: "#A7B5E2",
+          success: "#3FE97D",
+          warning: "#EDB807",
+          error: "#EB735C",
         },
       },
     ],
@@ -49,5 +50,28 @@ module.exports = {
     logs: true,
     rtl: false,
     darkTheme: "dark",
+  },
+  theme: {
+    extend: {
+      animation: {
+        blob: "blob 7s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(30px, -50px) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(-20px, 20px) scale(0.9)",
+          },
+          "100%": {
+            transform: "tranlate(0px, 0px) scale(1)",
+          },
+        },
+      },
+    },
   },
 };
