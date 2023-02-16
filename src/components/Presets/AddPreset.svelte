@@ -38,7 +38,7 @@
           ...state,
           // Parse tags as categories from presets
           categories: deriveCategoriesFromPresets(state.presets),
-          selectedPatch: preset.id,
+          selectedPatch: preset?.id,
         }
       })
 

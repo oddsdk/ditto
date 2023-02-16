@@ -85,8 +85,8 @@
     (!usernameValid || !usernameAvailable)
 </script>
 
-<div class="grid grid-flow-row auto-rows gap-2">
-  <div>Connect to sync your presets to the web.</div>
+<div class="flex flex-col items-center justify-center h-full-no-header gap-2">
+  <h2 class="text-lg font-semibold">Connect to sync your presets to the web.</h2>
   <div id="connect" class="form-control w-full max-w-xs gap-4">
     <div>
       <label class="label" for="connect">

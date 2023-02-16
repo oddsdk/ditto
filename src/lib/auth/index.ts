@@ -33,4 +33,6 @@ export const getUsername = (): string | undefined => {
   if (fullUsername) {
     return fullUsername.split('-')[1]
   }
+
+  return 'you'
 }

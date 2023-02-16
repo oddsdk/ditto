@@ -7,7 +7,7 @@
   export let preset: Patch
   export let handleEditClick: () => void
 
-  $: isDefault = preset.id === 'default'
+  $: isDefault = preset?.id === 'default'
 </script>
 
 <div class="relative pt-6">

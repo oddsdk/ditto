@@ -2,7 +2,7 @@
   import { patchStore, presetsStore } from '../../stores'
 
   const handlePreviousClick = () => {
-    const currentIndex = $presetsStore.presets.map((preset) => preset.id).indexOf($presetsStore.selectedPatch)
+    const currentIndex = $presetsStore.presets.map((preset) => preset?.id).indexOf($presetsStore.selectedPatch)
     const prevIndex = (currentIndex - 1) < 0 ? ($presetsStore.presets.length - 1) : (currentIndex - 1)
 
     patchStore.update(() => ({ ...$presetsStore.presets[prevIndex] }))
