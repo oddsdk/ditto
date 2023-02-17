@@ -11,7 +11,7 @@
         const patch = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch)
         return patch as Patch
       })
-      addNotification('File system synced', 'success')
+      addNotification('Synced presets', 'success')
     } catch (error) {
       console.error(error)
       addNotification('Failed to sync', 'error')
