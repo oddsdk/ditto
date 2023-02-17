@@ -23,7 +23,6 @@
     selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
 
     if (!maintainPresetSorting) {
-      console.log('tst')
       presets = state.presets
     }
   })
