@@ -163,7 +163,7 @@
     width: 55px;
     height: 55px;
     padding: 10px;
-    @apply shadow bg-slate-100/80 bg-gradient-to-r from-slate-100/80 to-[#F9FCFF] animate-gradient-x;
+    @apply shadow bg-slate-100/80 bg-gradient-to-r from-slate-100/80 to-[#F9FCFF] animate-gradient-xy;
     border-radius: 100%;
     cursor: pointer;
   }
