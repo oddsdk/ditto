@@ -19,22 +19,7 @@
   let presets = $presetsStore.presets
   let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
 
-  const unsubscribePresetsStore = presetsStore.subscribe((state) => {
-    selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
-
-    if (!maintainPresetSorting) {
-      presets = state.presets
-    }
-  })
-
-  // Update the selectedCategory and load the associated presets column
-  const handleCategoryClick = (category: string): void => {
-    maintainPresetSorting = true
-    presetsStore.update((state) => ({
-      ...state,
-      selectedCategory: category,
-    }))
-
+  const filterByCategory = (category: string): void => {
     switch (category) {
       case $presetsStore.categories[0]:
         presets = $presetsStore.presets
@@ -48,6 +33,26 @@
         presets = $presetsStore.presets.filter((preset) => preset.tags.includes(category))
         break
     }
+  }
+
+  const unsubscribePresetsStore = presetsStore.subscribe((state) => {
+    selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
+
+    if (!maintainPresetSorting) {
+      presets = state.presets
+      filterByCategory(state.selectedCategory)
+    }
+  })
+
+  // Update the selectedCategory and load the associated presets column
+  const handleCategoryClick = (category: string): void => {
+    maintainPresetSorting = true
+    presetsStore.update((state) => ({
+      ...state,
+      selectedCategory: category,
+    }))
+
+    filterByCategory(category)
 
     adding = false
     editing = false
