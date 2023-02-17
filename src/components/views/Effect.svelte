@@ -3,12 +3,13 @@
   import { fly } from 'svelte/transition'
 
   import { limits, process } from '$lib/audio/delay.js'
-  import { patchStore, presetsStore } from '../../stores.js'
+  import { patchStore } from '../../stores.js'
   import { objectEntries, translateToRange } from '$lib/utils.js'
   import type { Channels, Params } from '$lib/audio'
   import { addNotification } from '$lib/notifications'
   import type { Patch } from '$lib/patch'
-  import { savePreset } from '$lib/presets'
+  import { originalPresets, savePreset } from '$lib/presets'
+  import Edit from '$components/icons/Edit.svelte'
   import Knob from '$components/controls/Knob.svelte'
 
   export let input: Channels
@@ -107,7 +108,7 @@
     })
 
     // Check if the patch params have been modified from the original preset
-    const associatedPreset = $presetsStore.presets.find(({ id }) => id === patch.id)
+    const associatedPreset = originalPresets.find(({ id }) => id === patch.id)
     unsavedChanges = (associatedPreset?.params.delayTime !== patch.params.delayTime) || (associatedPreset?.params.feedback !== patch.params.feedback) || (associatedPreset?.params.mix !== patch.params.mix)
 
     render(
@@ -121,7 +122,11 @@
   }
 </script>
 <div class="flex flex-col items-center justify-center gap-8 min-h-[calc(100vh-150px)]">
-  <div class="grid-container grid grid-cols-3 gap-4 mx-auto">
+  <div class="relative grid-container grid grid-cols-3 gap-4 mx-auto">
+    {#if patch.id !== 'default' && unsavedChanges}
+      <button on:click={handleSavePatch} data-tip="save changes" class="tooltip btn btn-circle btn-sm cursor-pointer btn-outline absolute -top-8 right-0 flex items-center gap-2"><Edit /></button>
+    {/if}
+
     {#each objectEntries(params) as [id, param], i}
       <div in:fly={{ y: 20, delay: 0+(i*50), duration: 350 }}>
         <Knob
@@ -138,8 +143,5 @@
         />
       </div>
     {/each}
-    <!-- {#if patch.id !== 'default'}
-      <button on:click={handleSavePatch} class="col-end-4 btn btn-secondary">Save changes</button>
-    {/if} -->
   </div>
 </div>
