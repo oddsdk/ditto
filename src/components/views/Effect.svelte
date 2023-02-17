@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { fly } from 'svelte/transition'
 
   import { limits, process } from '$lib/audio/delay.js'
   import { patchStore, presetsStore } from '../../stores.js'
@@ -121,19 +122,21 @@
 </script>
 <div class="flex flex-col items-center justify-center gap-8 min-h-[calc(100vh-150px)]">
   <div class="grid-container grid grid-cols-3 gap-4 mx-auto">
-    {#each objectEntries(params) as [id, param]}
-      <Knob
-        {id}
-        label={param.label}
-        value={patch.params[id]}
-        min={param.min}
-        max={param.max}
-        unitLabel={param.unitLabel}
-        selected={selectedParam === id}
-        on:mousedown={selectParam}
-        on:mouseup={unselectParam}
-        on:input={setParam}
-      />
+    {#each objectEntries(params) as [id, param], i}
+      <div in:fly={{ y: 20, delay: 0+(i*50), duration: 350 }}>
+        <Knob
+          {id}
+          label={param.label}
+          value={patch.params[id]}
+          min={param.min}
+          max={param.max}
+          unitLabel={param.unitLabel}
+          selected={selectedParam === id}
+          on:mousedown={selectParam}
+          on:mouseup={unselectParam}
+          on:input={setParam}
+        />
+      </div>
     {/each}
     {#if patch.id !== 'default'}
       <button on:click={handleSavePatch} class="col-end-3 btn btn-secondary btn-xs">Save changes</button>

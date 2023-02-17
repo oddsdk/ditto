@@ -48,7 +48,7 @@
 </script>
 
 {#if input}
-  <div class="grid grid-flow-row auto-rows-max min-h-screen">
+  <div class="relative grid grid-flow-row auto-rows-max min-h-screen">
     {#if loading}
       <LoadingSpinner />
     {:else}

@@ -90,7 +90,7 @@
   <div class="col-span-1 pt-6 pr-4">
     <div class="w-full">
       {#each $presetsStore.categories as category, i}
-        <button on:click={() => handleCategoryClick(category)} in:fly={{ x: -20, delay: 0+(i*50), duration: 400 }} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
+        <button on:click={() => handleCategoryClick(category)} in:fly={{ x: -20, delay: 0+(i*20), duration: 400 }} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
           <h5>{category}</h5>
         </button>
       {/each}

@@ -3,7 +3,7 @@
   import { isOutMouseMove, mouseOutside } from '$lib/actions/mouse-outside'
   import { translateToRange } from '$lib/utils'
 
-  export let id: string
+  export let id: 'delayTime' | 'feedback' | 'mix'
   export let label: string
   export let value: number
   export let min: number
@@ -71,6 +71,17 @@
   function getStrokeDashOffset(rotation: number): number {
     return 184 - 184 * ((rotation * 1 + 132) / 264)
   }
+
+  type ColorMap = {
+    delayTime: string
+    feedback: string
+    mix: string
+  }
+  const colorMap: ColorMap = {
+    delayTime: 'E24A6E',
+    feedback: '818CF8',
+    mix: '83F42C',
+  }
 </script>
 
 <div
@@ -92,11 +103,11 @@
         <path
           d="M20,76 A 40 40 0 1 1 80 76"
           fill="none"
-          stroke="#525252"
+          stroke="#FAFAFA"
         /><path
           d="M20,76 A 40 40 0 1 1 80 76"
           fill="none"
-          stroke="#1eafed"
+          stroke={`#${colorMap[id]}`}
           style:stroke-dashoffset={`${strokeDashOffset}px`}
         />
       </svg>
@@ -112,7 +123,6 @@
     padding: 30px;
     border: 0;
     border-radius: 3px;
-    background-color: #414141;
     overflow: hidden;
   }
 
@@ -120,13 +130,13 @@
     position: relative;
     display: block;
     max-width: 100px;
-    font-size: 16px;
+    @apply text-lg;
     text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    color: #f4f8fa;
     font-family: monospace;
+    @apply text-slate-900;
   }
 
   .control-knob .dial {
@@ -140,9 +150,11 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 72px;
-    height: 72px;
-    border: 6px solid #313131;
+    width: 55px;
+    height: 55px;
+    padding: 10px;
+    @apply bg-slate-100/80;
+    @apply shadow;
     border-radius: 100%;
     cursor: pointer;
   }
@@ -150,9 +162,9 @@
     position: absolute;
     top: 5px;
     left: 50%;
-    width: 2px;
+    width: 1px;
     height: 10px;
-    background: #e4e8ea;
+    @apply bg-slate-900;
     content: '';
     transform: translateX(-50%);
   }
@@ -160,7 +172,7 @@
     position: absolute;
     pointer-events: none;
     touch-action: none;
-    stroke-width: 8;
+    stroke-width: 2;
     stroke-dasharray: 184 184;
   }
   .control-knob .dial > svg path {
