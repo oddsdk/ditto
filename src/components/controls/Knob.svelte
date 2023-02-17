@@ -140,13 +140,12 @@
     position: relative;
     display: block;
     max-width: 100px;
-    @apply text-lg;
+    @apply text-lg text-slate-900 text-center;
     text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     font-family: monospace;
-    @apply text-slate-900;
   }
 
   .control-knob .dial {

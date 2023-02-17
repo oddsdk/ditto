@@ -102,7 +102,7 @@
       <h1 class="text-2xl font-bold">Explore</h1>
       <div class="relative grow">
         <Search />
-        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 border-base-300 transition-colors rounded-lg h-10 py-3 pl-8 pr-8 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
+        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 border-base-300 transition-colors ease-in-out rounded-lg h-10 py-3 pl-8 pr-8 hover:border-secondary/50 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
         {#if isSearching}
           <ClearSearch {clearSearch} />
         {/if}
