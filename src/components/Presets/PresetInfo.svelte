@@ -2,6 +2,7 @@
   import { fly } from 'svelte/transition'
 
   import type { Patch } from '$lib/patch'
+  import { presetsStore } from '../../stores'
   import Delete from '$components/icons/Delete.svelte'
   import Edit from '$components/icons/Edit.svelte'
   import Favorite from '$components/icons/Favorite.svelte'
@@ -51,11 +52,13 @@
   </div>
 
   {#if preset?.tags?.length}
-    <p class="text-xs capitalize">
+    <div class="flex items-start justify-start capitalize">
       <span class="text-sm font-semibold">Tags:</span>
-      {#each preset.tags as tag}
-        <div on:click={() => handleCategoryClick(tag)} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 inline-block">{tag}</div>
-      {/each}
-    </p>
+      <div>
+        {#each preset.tags as tag}
+          <div on:click={() => handleCategoryClick(tag)} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 mb-2 inline-block hover:bg-secondary/70 hover:border-secondary/70 ease-in-out {$presetsStore.selectedCategory === tag ? 'bg-secondary/70 border-secondary/70' : ''}">{tag}</div>
+        {/each}
+      </div>
+    </div>
   {/if}
 </div>
