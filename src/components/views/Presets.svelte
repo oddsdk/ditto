@@ -2,7 +2,7 @@
   import {  onDestroy } from 'svelte'
   import { fly } from 'svelte/transition'
 
-  import { patchStore, presetsStore } from '../../stores'
+  import { patchStore, presetsStore, sessionStore } from '../../stores'
   import type { Patch } from '$lib/patch'
   import AddPreset from '$components/presets/AddPreset.svelte'
   import ClearSearch from '$components/icons/ClearSearch.svelte'
@@ -123,7 +123,7 @@
     </div>
     <PresetsTable {presets} {handlePresetClick} {isSearching} />
 
-    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
+    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 {!$sessionStore.connectedStatus ? 'bottom-12' : 'bottom-4'} text-white"><Plus /></button>
   </div>
 
   <div class="col-span-2 pt-5 px-6 bg-base-300">
