@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition'
+
   import { presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
 
@@ -28,8 +30,8 @@
 
       <!-- body -->
       <tbody>
-        {#each presets as preset}
-          <tr on:click={() => handlePresetClick(preset?.id)} class="group cursor-pointer">
+        {#each presets as preset, i}
+          <tr on:click={() => handlePresetClick(preset?.id)} in:fly={{ x: -20, delay: 0+(i*50), duration: 400 }} class="group cursor-pointer">
             <td class="group-hover:bg-base-200 group-hover:text-primary {$presetsStore.selectedPatch === preset?.id ? 'bg-base-200' : ''}">
               <svg fill="{preset?.favorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-primary" viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>

@@ -53,20 +53,24 @@
       <LoadingSpinner />
     {:else}
       <div class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b">
-        <h2 class="text-2xl font-mono">Ditto</h2>
+        <h2 class="text-2xl font-mono cursor-pointer">Ditto</h2>
         <div class="relative max-w-[500px] flex items-center justify-center">
           <div class="absolute left-[52px]">
-            {#if view === 'effect'}
-              <PresetsIcon on:click={setView} />
-            {:else}
+            {#if  view === 'presets'}
               <CloseIcon on:click={setView} />
+            {:else if view === 'effect' || view === 'connect'}
+              <PresetsIcon on:click={setView} />
             {/if}
           </div>
           <PresetHeader on:click={setView} />
         </div>
         <!-- {#if view === 'effect'} -->
         <div class="grid grid-flow-col auto-cols pt-1 pr-5 gap-5 justify-end">
-          <ConnectIcon on:click={setView} />
+          {#if view === 'connect'}
+            <CloseIcon on:click={setView} />
+          {:else}
+            <ConnectIcon on:click={setView} />
+          {/if}
         </div>
         <!-- {/if} -->
       </div>

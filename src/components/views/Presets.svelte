@@ -1,5 +1,6 @@
 <script lang="ts">
   import {  onDestroy } from 'svelte'
+  import { fly } from 'svelte/transition'
 
   import { patchStore, presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
@@ -88,8 +89,8 @@
 
   <div class="col-span-1 pt-6 pr-4">
     <div class="w-full">
-      {#each $presetsStore.categories as category}
-        <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
+      {#each $presetsStore.categories as category, i}
+        <button on:click={() => handleCategoryClick(category)} in:fly={{ x: -20, delay: 0+(i*50), duration: 400 }} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
           <h5>{category}</h5>
         </button>
       {/each}
@@ -109,7 +110,7 @@
     </div>
     <PresetsTable {presets} {handlePresetClick} {isSearching} />
 
-    <button on:click={handleAddPresetClick} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
+    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
   </div>
 
   <div class="col-span-2 pt-5 px-6 bg-base-300">
