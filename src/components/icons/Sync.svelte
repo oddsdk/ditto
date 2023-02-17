@@ -1,10 +1,16 @@
 <script lang="ts">
+  import { patchStore, presetsStore } from '../../stores'
+  import type { Patch } from '$lib/patch'
   import { hydratePresetsStore } from '$lib/presets'
   import { addNotification } from '$lib/notifications'
 
   const handleSyncClick = async () => {
     try {
       await hydratePresetsStore()
+      patchStore.update((): Patch => {
+        const patch = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch)
+        return patch as Patch
+      })
       addNotification('File system synced', 'success')
     } catch (error) {
       console.error(error)
