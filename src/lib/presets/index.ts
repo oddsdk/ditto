@@ -137,6 +137,7 @@ export const deletePreset = async (preset: Patch) => {
   presetsStore.update((state) => ({
     ...state,
     presets: state.presets.filter(({ id }) => id !== preset?.id),
+    selectedCategory: DEFAULT_CATEGORIES[0],
     selectedPatch: DEFAULT_PATCH.id,
   }))
 }
