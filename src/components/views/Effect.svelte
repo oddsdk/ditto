@@ -138,8 +138,8 @@
         />
       </div>
     {/each}
-    {#if patch.id !== 'default'}
-      <button on:click={handleSavePatch} class="col-end-3 btn btn-secondary btn-xs">Save changes</button>
-    {/if}
+    <!-- {#if patch.id !== 'default'}
+      <button on:click={handleSavePatch} class="col-end-4 btn btn-secondary">Save changes</button>
+    {/if} -->
   </div>
 </div>

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import { fade } from 'svelte/transition'
+
   import { isOutMouseMove, mouseOutside } from '$lib/actions/mouse-outside'
   import { translateToRange } from '$lib/utils'
 
@@ -100,6 +102,14 @@
       />
 
       <svg viewBox="0 0 100 100">
+        <!-- <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#818CF8" />
+            <stop offset="50%" stop-color="#E24A6E" />
+            <stop offset="100%" stop-color="#E24A6E" />
+          </linearGradient>
+          stroke="url(#gradient)"
+        </defs> -->
         <path
           d="M20,76 A 40 40 0 1 1 80 76"
           fill="none"
@@ -112,7 +122,7 @@
         />
       </svg>
     </div>
-    <div class="control-label">{label}</div>
+    <div class="control-label" in:fade>{label}</div>
   </div>
 </div>
 
@@ -153,8 +163,7 @@
     width: 55px;
     height: 55px;
     padding: 10px;
-    @apply bg-slate-100/80;
-    @apply shadow;
+    @apply shadow bg-slate-100/80 bg-gradient-to-r from-slate-100/80 to-[#F9FCFF] animate-gradient-x;
     border-radius: 100%;
     cursor: pointer;
   }
