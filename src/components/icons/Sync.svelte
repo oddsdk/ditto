@@ -1,8 +1,15 @@
 <script lang="ts">
   import { hydratePresetsStore } from '$lib/presets'
+  import { addNotification } from '$lib/notifications'
 
   const handleSyncClick = async () => {
-    await hydratePresetsStore()
+    try {
+      await hydratePresetsStore()
+      addNotification('File system synced', 'success')
+    } catch (error) {
+      console.error(error)
+      addNotification('Failed to sync', 'error')
+    }
   }
 </script>
 
