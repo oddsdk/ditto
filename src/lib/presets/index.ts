@@ -1,7 +1,7 @@
 import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 
-import { fileSystemStore, presetsStore } from '../../stores'
+import { fileSystemStore, patchStore, presetsStore } from '../../stores'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
 
@@ -84,14 +84,24 @@ const addOrUpdate = (arr: Patch[], element: Patch): Patch[] => {
  * @param preset Patch
  */
 export const savePreset = async (preset: Patch) => {
-  const localOnlyFs = getStore(fileSystemStore)
-  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
+  const fs = getStore(fileSystemStore)
+  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
 
-  await localOnlyFs?.write(
+  // Check for duplicate preset in the opposite directory and remove it
+  const oppositeDirectory = preset.visibility === Visibility.private ? Visibility.public : Visibility.private
+  const oppositeContentPath = webnative.path.combine(PRESETS_DIRS[oppositeDirectory], webnative.path.file(`${preset?.id}.json`))
+  const exists = await fs?.exists(oppositeContentPath)
+  if (exists) {
+    await fs?.rm(
+      oppositeContentPath
+    )
+  }
+
+  await fs?.write(
     contentPath,
     new TextEncoder().encode(JSON.stringify(preset))
   )
-  await localOnlyFs?.publish()
+  await fs?.publish()
 
   presetsStore.update((state) => ({
     ...state,
@@ -99,8 +109,14 @@ export const savePreset = async (preset: Patch) => {
   }))
 
   const storedPreset = JSON.parse(new TextDecoder().decode(
-    await localOnlyFs?.read(contentPath)
+    await fs?.read(contentPath)
   )) as Patch
+
+  // Update patchStore if it currently contains this preset
+  const patch = getStore(patchStore)
+  if (patch.id === preset?.id) {
+    patchStore.update(() => preset)
+  }
 
   console.log('saved preset', storedPreset)
 }
@@ -112,7 +128,7 @@ export const savePreset = async (preset: Patch) => {
  */
 export const deletePreset = async (preset: Patch) => {
   const fs = getStore(fileSystemStore)
-  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset.id}.json`))
+  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
 
   await fs?.rm(contentPath)
 
@@ -120,7 +136,7 @@ export const deletePreset = async (preset: Patch) => {
 
   presetsStore.update((state) => ({
     ...state,
-    presets: state.presets.filter(({ id }) => id !== preset.id),
+    presets: state.presets.filter(({ id }) => id !== preset?.id),
     selectedPatch: DEFAULT_PATCH.id,
   }))
 }
@@ -155,7 +171,7 @@ export const storeToFilesystem: (presets: Patch[], visibility: Visibility) => Pr
 
   await Promise.all(presets.map(async preset => {
     await fs?.write(
-      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(`${preset.id}.json`)),
+      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(`${preset?.id}.json`)),
       new TextEncoder().encode(JSON.stringify(preset))
       )
   }))

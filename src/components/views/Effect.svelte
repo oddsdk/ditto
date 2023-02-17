@@ -2,7 +2,7 @@
   import { onDestroy } from 'svelte'
 
   import { limits, process } from '$lib/audio/delay.js'
-  import { patchStore } from '../../stores.js'
+  import { patchStore, presetsStore } from '../../stores.js'
   import { objectEntries, translateToRange } from '$lib/utils.js'
   import type { Channels, Params } from '$lib/audio'
   import { addNotification } from '$lib/notifications'
@@ -15,6 +15,7 @@
 
   let patch: Patch
   let selectedParam: keyof Params | null = null
+  let unsavedChanges = false
 
   const params: Params = {
     delayTime: {
@@ -103,6 +104,10 @@
       original: { min: 0, max: 100 },
       scaled: { min: limits.mix.min, max: limits.mix.max }
     })
+
+    // Check if the patch params have been modified from the original preset
+    const associatedPreset = $presetsStore.presets.find(({ id }) => id === patch.id)
+    unsavedChanges = (associatedPreset?.params.delayTime !== patch.params.delayTime) || (associatedPreset?.params.feedback !== patch.params.feedback) || (associatedPreset?.params.mix !== patch.params.mix)
 
     render(
       process({

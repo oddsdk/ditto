@@ -4,9 +4,12 @@
   import { patchStore, presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
   import AddPreset from '$components/presets/AddPreset.svelte'
-  import EditPreset from '$components/presets/EditPreset.svelte'
-  import PresetInfo from '$components/presets/PresetInfo.svelte'
   import ClearSearch from '$components/icons/ClearSearch.svelte'
+  import EditPreset from '$components/presets/EditPreset.svelte'
+  import Plus from '$components/icons/Plus.svelte'
+  import PresetInfo from '$components/presets/PresetInfo.svelte'
+  import PresetsTable from '$components/presets/PresetsTable.svelte'
+  import Search from '$components/icons/Search.svelte'
 
   let isSearching = false
   let adding = false
@@ -81,46 +84,35 @@
   onDestroy(unsubscribePresetsStore)
 </script>
 
-<div class="grid-container grid grid-cols-3 mt-2 mb-2">
-  <h4 class="col-span-1 pl-8 py-3 text-lg">Categories</h4>
-  <h4 class="col-span-1 pl-10 py-3 text-lg flex items-center justify-between">Presets <button on:click={handleAddPresetClick} class="btn btn-secondary btn-xs">Add Preset</button></h4>
-  <h4 class="col-span-1 pl-7 py-3 text-lg">Preset Info</h4>
-</div>
+<div class="grid-container grid grid-cols-8 divide-x h-full-no-header">
 
-<div class="grid-container grid grid-cols-3 divide-x-2 min-h-[calc(100vh-220px)] gap-4">
-
-  <div class="col-span-1 px-4">
+  <div class="col-span-1 pt-6 pr-4">
     <div class="w-full">
-      <div class="relative w-full mb-2">
-        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 transition-colors rounded h-10 py-3 pl-4 pr-8 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
-        {#if isSearching}
-          <ClearSearch {clearSearch} />
-        {/if}
-      </div>
-
       {#each $presetsStore.categories as category}
-        <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-sm {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
+        <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
           <h5>{category}</h5>
         </button>
       {/each}
     </div>
   </div>
 
-  <div class="col-span-1 px-4">
-    <div class="w-full">
-      {#each presets as preset}
-        <button on:click={() => handlePresetClick(preset.id)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-sm {$presetsStore.selectedPatch === preset.id ? 'bg-primary text-white' : ''}">
-          <h5>{preset.name}</h5>
-        </button>
-      {/each}
-
-      {#if isSearching && !presets.length}
-        <h5 class="text-center text-sm pt-8">No search results</h5>
-      {/if}
+  <div class="col-span-5 pt-5 px-4 relative">
+    <div class="flex items-center gap-4 w-full mb-4 group">
+      <h1 class="text-2xl font-bold">Explore</h1>
+      <div class="relative grow">
+        <Search />
+        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 border-base-300 transition-colors rounded-lg h-10 py-3 pl-8 pr-8 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
+        {#if isSearching}
+          <ClearSearch {clearSearch} />
+        {/if}
+      </div>
     </div>
+    <PresetsTable {presets} {handlePresetClick} {isSearching} />
+
+    <button on:click={handleAddPresetClick} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
   </div>
 
-  <div class="col-span-1 px-4">
+  <div class="col-span-2 pt-5 px-6 bg-base-300">
     {#if adding}
       <AddPreset handleCancelClick={() => adding = false} />
     {:else}

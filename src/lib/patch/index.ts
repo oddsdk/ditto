@@ -24,7 +24,7 @@ export const DEFAULT_PATCH = {
   creator: 'bgins',
   favorite: false,
   name: 'Default',
-  notes: '',
+  notes: 'This patch is intended to be a jumping off point for you to modify to your heart\'s content',
   params: {
     delayTime: 200,
     feedback: 0,

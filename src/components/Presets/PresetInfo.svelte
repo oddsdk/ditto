@@ -7,12 +7,15 @@
   export let preset: Patch
   export let handleEditClick: () => void
 
-  $: isDefault = preset.id === 'default'
+  $: isDefault = preset?.id === 'default'
 </script>
 
 <div class="relative pt-6">
   {#if !isDefault}
-    <div class="absolute top-0 right-0 flex gap-4">
+    <div class="absolute top-0 right-0 flex items-center gap-4 text-slate-900">
+      {#if !isDefault}
+        <Favorite {preset} />
+      {/if}
       <button on:click={handleEditClick}><Edit /></button>
       <Delete {preset} />
     </div>
@@ -21,34 +24,21 @@
   {#if preset?.creator}
     <h3 class="text-sm title-font text-gray-500 tracking-widest">{preset.creator}</h3>
   {/if}
-  <h4 class="text-gray-900 text-3xl title-font font-medium mb-1">{preset?.name}</h4>
-
-  <div class="flex items-center mb-4">
-    {#if !isDefault}
-      <Favorite {preset} />
-    {/if}
-  </div>
+  <h4 class="text-gray-900 text-3xl font-semibold title-font font-medium mb-6">{preset?.name}</h4>
 
   {#if preset?.notes}
+    <h5 class="font-semibold mb-1">Notes:</h5>
     <p class="leading-relaxed mb-6">{preset.notes}</p>
   {/if}
 
-  <div class="flex items-center justify-between py-5 border-t-2 border-b-2 border-gray-200 mb-5">
-    <div class="text-center">
-      <h6 class="text-lg">Time</h6>
-      <p class="text-sm">{preset?.params?.delayTime?.toFixed(0)}</p>
-    </div>
-    <div class="text-center">
-      <h6 class="text-lg">Feedback</h6>
-      <p class="text-sm">{preset?.params?.feedback?.toFixed(0)}</p>
-    </div>
-    <div class="text-center">
-      <h6 class="text-lg">Mix</h6>
-      <p class="text-sm">{preset?.params?.mix?.toFixed(0)}</p>
-    </div>
-  </div>
+  <h5 class="font-semibold mb-1">Parameters:</h5>
+  <ul class="pl-6 mb-6 text-xs list-disc">
+    <li>Time: {preset?.params?.delayTime?.toFixed(0)}</li>
+    <li>Feedback: {preset?.params?.feedback?.toFixed(0)}</li>
+    <li>Mix: {preset?.params?.mix?.toFixed(0)}</li>
+  </ul>
 
   {#if preset?.tags?.length}
-    <p class="text-xs"><span class="text-sm">Tags: </span>{preset.tags.join(', ')}</p>
+    <p class="text-xs capitalize"><span class="text-sm font-semibold">Tags: </span>{preset.tags.join(', ')}</p>
   {/if}
 </div>
