@@ -89,7 +89,7 @@
         {/if}
       </div>
     {/if}
-    {#if !$sessionStore.connectedStatus}
+    {#if !loading && !$sessionStore.connectedStatus}
       <div class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace">Presets will only be saved to your local file system until you register</div>
     {/if}
   </div>
