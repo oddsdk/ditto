@@ -15,16 +15,22 @@
   let isSearching = false
   let adding = false
   let editing = false
+  let maintainPresetSorting = false
   let presets = $presetsStore.presets
   let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
 
   const unsubscribePresetsStore = presetsStore.subscribe((state) => {
     selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
-    presets = state.presets
+
+    if (!maintainPresetSorting) {
+      console.log('tst')
+      presets = state.presets
+    }
   })
 
   // Update the selectedCategory and load the associated presets column
   const handleCategoryClick = (category: string): void => {
+    maintainPresetSorting = true
     presetsStore.update((state) => ({
       ...state,
       selectedCategory: category,
@@ -46,10 +52,12 @@
 
     adding = false
     editing = false
+    maintainPresetSorting = false
   }
 
   // Update the selectedPatch and load it into the patchStore
   const handlePresetClick = (id: string) => {
+    maintainPresetSorting = true
     presetsStore.update((state) => ({
       ...state,
       selectedPatch: id,
@@ -61,6 +69,7 @@
 
     adding = false
     editing = false
+    maintainPresetSorting = false
   }
 
   // Filter presets based on a search parameter
@@ -120,7 +129,7 @@
       {#if editing}
         <EditPreset handleCancelClick={handleEditClick} preset={selectedPreset} />
       {:else}
-        <PresetInfo {handleEditClick} preset={selectedPreset} />
+        <PresetInfo {handleEditClick} {handleCategoryClick} preset={selectedPreset} />
       {/if}
     {/if}
   </div>

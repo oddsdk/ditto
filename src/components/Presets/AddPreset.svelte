@@ -5,6 +5,7 @@
   import { type Patch, Visibility } from '$lib/patch'
   import { getUsername } from '$lib/auth'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
+  import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 
   export let handleCancelClick: () => void
 
@@ -22,9 +23,9 @@
         name,
         notes,
         params: {
-          delayTime: 200,
-          feedback: 0,
-          mix: 50
+          delayTime: $patchStore.params.delayTime ?? 200,
+          feedback: $patchStore.params.feedback ?? 0,
+          mix: $patchStore.params.mix ?? 50,
         },
         tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
         version,
@@ -38,6 +39,7 @@
           ...state,
           // Parse tags as categories from presets
           categories: deriveCategoriesFromPresets(state.presets),
+          selectedCategory: DEFAULT_CATEGORIES[0],
           selectedPatch: preset?.id,
         }
       })

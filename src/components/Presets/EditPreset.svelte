@@ -4,6 +4,7 @@
   import { addNotification } from '$lib/notifications'
   import { type Patch, Visibility } from '$lib/patch'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
+  import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 
   export let preset: Patch
   export let handleCancelClick: () => void
@@ -31,6 +32,7 @@
           ...state,
           // Parse tags as categories from presets
           categories: deriveCategoriesFromPresets(state.presets),
+          selectedCategory: DEFAULT_CATEGORIES[0]
         }
       })
 

@@ -8,6 +8,7 @@
 
   export let preset: Patch
   export let handleEditClick: () => void
+  export let handleCategoryClick: (category: string) => void
 
   $: isDefault = preset?.id === 'default'
 </script>
@@ -34,13 +35,27 @@
   {/if}
 
   <h5 class="font-semibold mb-1">Parameters:</h5>
-  <ul class="pl-6 mb-6 text-xs list-disc">
-    <li>Time: {preset?.params?.delayTime?.toFixed(0)}</li>
-    <li>Feedback: {preset?.params?.feedback?.toFixed(0)}</li>
-    <li>Mix: {preset?.params?.mix?.toFixed(0)}</li>
-  </ul>
+  <div class="stats shadow mb-6">
+    <div class="stat">
+      <div class="stat-title text-xs">Time</div>
+      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.delayTime?.toFixed(0)}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title text-xs">Feedback</div>
+      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.feedback?.toFixed(0)}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title text-xs">Mix</div>
+      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.mix?.toFixed(0)}</div>
+    </div>
+  </div>
 
   {#if preset?.tags?.length}
-    <p class="text-xs capitalize"><span class="text-sm font-semibold">Tags: </span>{preset.tags.join(', ')}</p>
+    <p class="text-xs capitalize">
+      <span class="text-sm font-semibold">Tags:</span>
+      {#each preset.tags as tag}
+        <div on:click={() => handleCategoryClick(tag)} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 inline-block">{tag}</div>
+      {/each}
+    </p>
   {/if}
 </div>
