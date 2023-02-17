@@ -27,14 +27,14 @@
   }
 </script>
 
-<div class="grid grid-flow-row auto-rows w-full justify-center gap-4">
-  <div>
+<div class="flex flex-col items-center justify-center h-full-no-header gap-6">
+  <h2 class="text-lg">
     Enter the connection code from the Ditto app to approve the connection.
-  </div>
+  </h2>
   <input
     id="pin"
     type="text"
-    class="input input-bordered w-full max-w-[197px] mb-2 rounded-full h-[68px] place-self-center focus:outline-none font-mono text-2xl text-deviceCode text-center tracking-[0.1em] font-light {pinError
+    class="input input-bordered focus:outline-0 w-full max-w-[197px] mb-2 rounded-full h-[68px] place-self-center focus:outline-none font-mono text-2xl text-deviceCode text-center tracking-[0.1em] font-light {pinError
       ? '!text-red-500 !border-red-500'
       : ''}"
     maxlength="6"
@@ -43,7 +43,7 @@
     on:keyup={checkPin}
   />
   <button
-    class="btn btn-sm btn-outline w-2/5 max-w[197px] place-self-center"
+    class="btn btn-outline"
     on:click={cancelConnection}
   >
     Cancel Request

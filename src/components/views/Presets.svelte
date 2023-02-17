@@ -1,5 +1,6 @@
 <script lang="ts">
   import {  onDestroy } from 'svelte'
+  import { fly } from 'svelte/transition'
 
   import { patchStore, presetsStore } from '../../stores'
   import type { Patch } from '$lib/patch'
@@ -14,16 +15,21 @@
   let isSearching = false
   let adding = false
   let editing = false
+  let maintainPresetSorting = false
   let presets = $presetsStore.presets
   let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
 
   const unsubscribePresetsStore = presetsStore.subscribe((state) => {
     selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
-    presets = state.presets
+
+    if (!maintainPresetSorting) {
+      presets = state.presets
+    }
   })
 
   // Update the selectedCategory and load the associated presets column
   const handleCategoryClick = (category: string): void => {
+    maintainPresetSorting = true
     presetsStore.update((state) => ({
       ...state,
       selectedCategory: category,
@@ -45,10 +51,12 @@
 
     adding = false
     editing = false
+    maintainPresetSorting = false
   }
 
   // Update the selectedPatch and load it into the patchStore
   const handlePresetClick = (id: string) => {
+    maintainPresetSorting = true
     presetsStore.update((state) => ({
       ...state,
       selectedPatch: id,
@@ -60,6 +68,7 @@
 
     adding = false
     editing = false
+    maintainPresetSorting = false
   }
 
   // Filter presets based on a search parameter
@@ -88,8 +97,8 @@
 
   <div class="col-span-1 pt-6 pr-4">
     <div class="w-full">
-      {#each $presetsStore.categories as category}
-        <button on:click={() => handleCategoryClick(category)} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
+      {#each $presetsStore.categories as category, i}
+        <button on:click={() => handleCategoryClick(category)} in:fly={{ x: -20, delay: 0+(i*20), duration: 400 }} class="w-full flex cursor-pointer py-2 px-4 hover:bg-primary hover:text-white transition-colors ease-in-out rounded capitalize text-xs {$presetsStore.selectedCategory === category ? 'bg-primary text-white' : ''}">
           <h5>{category}</h5>
         </button>
       {/each}
@@ -101,7 +110,7 @@
       <h1 class="text-2xl font-bold">Explore</h1>
       <div class="relative grow">
         <Search />
-        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 border-base-300 transition-colors rounded-lg h-10 py-3 pl-8 pr-8 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
+        <input on:input={handlePresetSearch} bind:value={searchTerm} type="text" placeholder="Search presets" spellcheck="false" name="search" class="w-full text-sm bg-base-100 border-2 border-base-300 transition-colors ease-in-out rounded-lg h-10 py-3 pl-8 pr-8 hover:border-secondary/50 focus:border-secondary focus:outline-none {isSearching ? 'border-secondary' : ''}" />
         {#if isSearching}
           <ClearSearch {clearSearch} />
         {/if}
@@ -109,7 +118,7 @@
     </div>
     <PresetsTable {presets} {handlePresetClick} {isSearching} />
 
-    <button on:click={handleAddPresetClick} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
+    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
   </div>
 
   <div class="col-span-2 pt-5 px-6 bg-base-300">
@@ -119,7 +128,7 @@
       {#if editing}
         <EditPreset handleCancelClick={handleEditClick} preset={selectedPreset} />
       {:else}
-        <PresetInfo {handleEditClick} preset={selectedPreset} />
+        <PresetInfo {handleEditClick} {handleCategoryClick} preset={selectedPreset} />
       {/if}
     {/if}
   </div>

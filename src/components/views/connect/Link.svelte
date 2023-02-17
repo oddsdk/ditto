@@ -13,11 +13,11 @@
   connectionLink = `${dittoAppURL}/link-device?username=${username}`
   qrcode = new QRCode({
     content: connectionLink,
-    color: '#e2e2e2',
-    background: '#000',
+    color: '#171717',
+    background: '#FAFAFA',
     padding: 0,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
     join: true
   }).svg()
 
@@ -26,13 +26,11 @@
   }
 </script>
 
-<div class="grid grid-flow-col grid-cols-[1fr_2fr] gap-10">
-  <div>{@html qrcode}</div>
-  <div class="grid grid-flow-row auto-rows">
-    <span> Scan this code, or share the connection link. </span>
-    <button class="btn btn-outline" on:click={copyLink}>
-      <Share />
-      <span class="ml-2">Share connection link</span>
-    </button>
-  </div>
+<div class="flex flex-col items-center justify-center h-full-no-header gap-6">
+  <div class="rounded-lg overflow-hidden">{@html qrcode}</div>
+  <span class="text-lg">Scan this code, or share the connection link</span>
+  <button class="btn btn-outline" on:click={copyLink}>
+    <Share />
+    <span class="ml-2">Share connection link</span>
+  </button>
 </div>

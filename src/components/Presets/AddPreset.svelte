@@ -5,6 +5,7 @@
   import { type Patch, Visibility } from '$lib/patch'
   import { getUsername } from '$lib/auth'
   import { deriveCategoriesFromPresets, savePreset } from '$lib/presets'
+  import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 
   export let handleCancelClick: () => void
 
@@ -22,9 +23,9 @@
         name,
         notes,
         params: {
-          delayTime: 200,
-          feedback: 0,
-          mix: 50
+          delayTime: $patchStore.params.delayTime ?? 200,
+          feedback: $patchStore.params.feedback ?? 0,
+          mix: $patchStore.params.mix ?? 50,
         },
         tags: tags ? tags?.toLowerCase().split(',')?.map((tag: string) => tag.trim()) : [],
         version,
@@ -38,6 +39,7 @@
           ...state,
           // Parse tags as categories from presets
           categories: deriveCategoriesFromPresets(state.presets),
+          selectedCategory: DEFAULT_CATEGORIES[0],
           selectedPatch: preset?.id,
         }
       })
@@ -60,16 +62,16 @@
   <h1 class="text-2xl font-bold mb-4">New Preset</h1>
 
   <label for="name" class="mb-1 text-xs">Name</label>
-  <input type="text" name="name" bind:value={name} class="input input-bordered w-full mb-3" spellcheck="false" required />
+  <input type="text" name="name" bind:value={name} class="input input-bordered focus:outline-0 w-full mb-3" spellcheck="false" required />
 
   <label for="notes" class="mb-1 text-xs">Notes</label>
-  <textarea class="textarea textarea-bordered w-full mb-3" bind:value={notes} name="notes"></textarea>
+  <textarea class="textarea textarea-bordered focus:outline-0 w-full mb-3" bind:value={notes} name="notes"></textarea>
 
   <label for="visibility" class="mb-1 text-xs">Tags(comma separated)</label>
-  <input type="text" name="tags" bind:value={tags} class="input input-bordered w-full mb-3" spellcheck="false" />
+  <input type="text" name="tags" bind:value={tags} class="input input-bordered focus:outline-0 w-full mb-3" spellcheck="false" />
 
   <label for="visibility" class="mb-1 text-xs">Visibility</label>
-  <select class="select select-bordered w-full mb-8" bind:value={visibility} name="visibility" required>
+  <select class="select select-bordered focus:outline-0 w-full mb-8" bind:value={visibility} name="visibility" required>
     <option selected value={Visibility.private}>Private</option>
     <option value={Visibility.public}>Public</option>
   </select>

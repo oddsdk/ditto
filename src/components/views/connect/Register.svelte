@@ -96,7 +96,7 @@
         type="text"
         placeholder=""
         spellcheck="false"
-        class="input input-bordered w-full max-w-xs"
+        class="input input-bordered focus:outline-0 w-full max-w-xs"
         class:input-error={usernameError}
         on:input={checkUsername}
       />
