@@ -159,7 +159,7 @@ export const saveAllPresets = async (presets: Patch[]) => {
 
   await fs?.publish()
 
-  updatedPresets.forEach((preset) => {
+  await Promise.all(updatedPresets.map(async (preset) => {
     presetsStore.update((state) => {
       const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
       originalPresets = JSON.parse(JSON.stringify(updatedPresets))
@@ -176,7 +176,17 @@ export const saveAllPresets = async (presets: Patch[]) => {
     if (patch.id === preset?.id) {
       patchStore.update(() => preset)
     }
-  })
+
+    const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
+
+    const storedPreset = JSON.parse(new TextDecoder().decode(
+      await fs?.read(contentPath)
+    )) as Patch
+
+    console.log('stored preset', storedPreset)
+
+    return storedPreset
+  }))
 
   addNotification('Presets copied', 'success')
 }
