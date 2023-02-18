@@ -126,7 +126,7 @@
     <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 {!$sessionStore.connectedStatus ? 'bottom-12' : 'bottom-4'} text-white"><Plus /></button>
   </div>
 
-  <div class="col-span-2 pt-5 px-6 bg-base-300">
+  <div class="col-span-2 pt-5 pr-6 pl-4 bg-base-300">
     {#if adding}
       <AddPreset handleCancelClick={() => adding = false} />
     {:else}

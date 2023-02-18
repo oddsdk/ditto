@@ -35,19 +35,19 @@
     <p class="leading-relaxed mb-6">{preset.notes}</p>
   {/if}
 
-  <h5 class="font-semibold mb-1">Parameters:</h5>
+  <h5 class="font-semibold mb-2">Parameters:</h5>
   <div class="stats shadow mb-6">
     <div class="stat">
-      <div class="stat-title text-xs">Time</div>
-      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.delayTime?.toFixed(0)}</div>
+      <div class="stat-title text-[10px]">Time</div>
+      <div class="stat-value text-[12px] leading-6 text-slate-900/70">{preset?.params?.delayTime?.toFixed(0)}<span class="text-[11px]">ms</span></div>
     </div>
     <div class="stat">
-      <div class="stat-title text-xs">Feedback</div>
-      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.feedback?.toFixed(0)}</div>
+      <div class="stat-title text-[10px]">Feedback</div>
+      <div class="stat-value text-[12px] leading-6 text-slate-900/70">{preset?.params?.feedback?.toFixed(0)}<span class="text-[11px]">%</span></div>
     </div>
     <div class="stat">
-      <div class="stat-title text-xs">Mix</div>
-      <div class="stat-value text-lg text-slate-900/70">{preset?.params?.mix?.toFixed(0)}</div>
+      <div class="stat-title text-[10px]">Mix</div>
+      <div class="stat-value text-[12px] leading-6 text-slate-900/70">{preset?.params?.mix?.toFixed(0)}<span class="text-[11px]">%</span></div>
     </div>
   </div>
 

@@ -4,6 +4,7 @@
 
   import { sessionStore } from '../stores'
   import { initialize } from '$lib/init'
+  import { clearStorage } from '$lib/filesystem'
   import type { Channels } from '$lib/audio/index'
   import Effect from '$components/views/Effect.svelte'
   import CloseIcon from '$components/icons/Close.svelte'
@@ -13,7 +14,8 @@
   import PresetHeader from '$components/presets/PresetHeader.svelte'
   import Presets from '$components/views/Presets.svelte'
   import PresetsIcon from '$components/icons/Presets.svelte'
-  import Sync from '$components/icons/Sync.svelte'
+  // import Sync from '$components/icons/Sync.svelte'
+  import UnsavedChanges from '$components/icons/UnsavedChanges.svelte'
 
   type View = 'connect' | 'effect' | 'presets'
 
@@ -39,6 +41,7 @@
   async function init() {
     loading = true
     await initialize()
+    // await clearStorage()
     loading = false
   }
 
@@ -57,7 +60,7 @@
       <div class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b">
         <h2 class="text-2xl font-mono cursor-pointer">Ditto</h2>
         <div class="relative max-w-[500px] flex items-center justify-center">
-          <div class="absolute {$sessionStore.connectedStatus ? 'left-[72px]' : 'left-[52px]'}">
+          <div class="absolute left-[52px]">
             {#if  view === 'presets'}
               <CloseIcon on:click={setView} />
             {:else if view === 'effect' || view === 'connect'}
@@ -66,18 +69,17 @@
           </div>
           <PresetHeader on:click={setView} />
         </div>
-        <!-- {#if view === 'effect'} -->
-        <div class="grid grid-flow-col auto-cols pt-1 pr-5 gap-5 justify-end">
-          {#if $sessionStore.connectedStatus}
+        <div class="relative flex items-center justify-end pr-5 gap-5">
+          <!-- {#if $sessionStore.connectedStatus}
             <Sync />
-          {/if}
+          {/if} -->
+          <UnsavedChanges />
           {#if view === 'connect'}
             <CloseIcon on:click={setView} />
           {:else}
             <ConnectIcon on:click={setView} />
           {/if}
         </div>
-        <!-- {/if} -->
       </div>
       <div class="relative pl-4">
         {#if view === 'effect'}

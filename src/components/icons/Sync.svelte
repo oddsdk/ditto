@@ -1,16 +1,25 @@
 <script lang="ts">
-  import { patchStore, presetsStore } from '../../stores'
+  import { fileSystemStore, patchStore, presetsStore, programStore, sessionStore } from '../../stores'
+  // import { initialize } from '$lib/init'
   import type { Patch } from '$lib/patch'
   import { hydratePresetsStore } from '$lib/presets'
   import { addNotification } from '$lib/notifications'
 
   const handleSyncClick = async () => {
     try {
-      await hydratePresetsStore()
-      patchStore.update((): Patch => {
-        const patch = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch)
-        return patch as Patch
-      })
+      // window.location.reload()
+      if ($sessionStore.session?.username) {
+        const fs = await $programStore?.fileSystem.load($sessionStore.session?.username)
+        if (fs) {
+          fileSystemStore.set(fs)
+          await hydratePresetsStore()
+          // await initialize()
+          patchStore.update((): Patch => {
+            const patch = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch)
+            return patch as Patch
+          })
+        }
+      }
       addNotification('Synced presets', 'success')
     } catch (error) {
       console.error(error)
