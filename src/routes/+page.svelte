@@ -4,7 +4,6 @@
 
   import { sessionStore } from '../stores'
   import { initialize } from '$lib/init'
-  import { clearStorage } from '$lib/filesystem'
   import type { Channels } from '$lib/audio/index'
   import Effect from '$components/views/Effect.svelte'
   import CloseIcon from '$components/icons/Close.svelte'
@@ -41,7 +40,6 @@
   async function init() {
     loading = true
     await initialize()
-    // await clearStorage()
     loading = false
   }
 
