@@ -4,7 +4,6 @@
 
   import { sessionStore } from '../stores'
   import { initialize } from '$lib/init'
-  import { clearStorage } from '$lib/filesystem'
   import type { Channels } from '$lib/audio/index'
   import Effect from '$components/views/Effect.svelte'
   import CloseIcon from '$components/icons/Close.svelte'
@@ -41,7 +40,6 @@
   async function init() {
     loading = true
     await initialize()
-    // await clearStorage()
     loading = false
   }
 
@@ -60,7 +58,7 @@
       <div class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b">
         <h2 class="text-2xl font-mono cursor-pointer">Ditto</h2>
         <div class="relative max-w-[500px] flex items-center justify-center">
-          <div class="absolute left-[52px]">
+          <div class="absolute left-[68px]">
             {#if  view === 'presets'}
               <CloseIcon on:click={setView} />
             {:else if view === 'effect' || view === 'connect'}
@@ -92,7 +90,7 @@
       </div>
     {/if}
     {#if !loading && !$sessionStore.connectedStatus}
-      <div class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace">Presets will only be saved to locally until you connect with the Ditto companion app</div>
+      <div class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace">Presets will only be saved locally until you connect with the Ditto companion app</div>
     {/if}
   </div>
 {/if}

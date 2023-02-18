@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fade } from 'svelte/transition'
+
   import { patchStore } from '../../stores'
   import { addNotification } from '$lib/notifications'
   import { originalPresets, savePreset } from '$lib/presets'
@@ -24,5 +26,5 @@
 </script>
 
 {#if $patchStore.id !== 'default' && unsavedChanges}
-  <button on:click={handleSavePatch} class="absolute top-1/2 -translate-y-1/2 right-14 cursor-pointer flex items-center gap-2"><title>Save changes</title><Edit /></button>
+  <button in:fade on:click={handleSavePatch} class="absolute top-1/2 -translate-y-1/2 right-14 cursor-pointer flex items-center gap-2"><title>Save changes</title><Edit /></button>
 {/if}

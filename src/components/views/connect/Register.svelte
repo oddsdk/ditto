@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition'
   import * as webnative from 'webnative'
 
   import { fileSystemStore, programStore, sessionStore } from '../../../stores'
   import {
     loadFromFilesystem as loadPresets,
-    storeToFilesystem as storePresets
+    saveAllPresets,
   } from '$lib/presets'
   import { usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
@@ -60,13 +61,18 @@
             })
 
             // Load presets from local-only filesystem
-            const presets = await loadPresets(Visibility.private)
+            const presets = [
+              ...(await loadPresets(Visibility.private)),
+              ...(await loadPresets(Visibility.public)),
+            ]
+
+            console.log('presets', presets)
 
             // Switch to persistent filesystem
             fileSystemStore.set(fs)
 
-            // Store presets in persistent filesystem
-            await storePresets(presets, Visibility.private)
+            // Update the creator field of each preset with the username
+            await saveAllPresets(presets)
           } else {
             console.error('File system missing on session at registration')
           }
@@ -85,9 +91,9 @@
     (!usernameValid || !usernameAvailable)
 </script>
 
-<div class="flex flex-col items-center justify-center h-full-no-header gap-2">
+<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center h-full-no-header gap-2">
   <h2 class="text-lg font-semibold">Connect to sync your presets to the web.</h2>
-  <div id="connect" class="form-control w-full max-w-xs gap-4">
+  <form on:submit={registerUser} id="connect" class="form-control w-full max-w-xs gap-4">
     <div>
       <label class="label" for="connect">
         <span class="label-text">Choose a username</span>
@@ -117,10 +123,10 @@
 
     <button
       class="btn btn-primary"
+      type="submit"
       disabled={displayName.length === 0 || usernameError}
-      on:click={registerUser}
     >
       Connect
     </button>
-  </div>
+  </form>
 </div>

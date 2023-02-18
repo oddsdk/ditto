@@ -1,6 +1,7 @@
 <script lang="ts">
   import clipboardCopy from 'clipboard-copy'
   import { createEventDispatcher } from 'svelte'
+  import { fly } from 'svelte/transition'
 
   import { dittoAppURL } from '$lib/auth'
 
@@ -15,7 +16,7 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center auto-rows gap-4 h-full-no-header">
+<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center auto-rows gap-4 h-full-no-header">
   <div class="font-semibold text-lg">You've already connected with the Ditto web app.</div>
   <div class="flex gap-4 items-ceneter justify-center">
     <button class="btn btn-primary" on:click={copyLink}>Copy app link</button>

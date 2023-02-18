@@ -2,6 +2,7 @@ import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 
 import { fileSystemStore, patchStore, presetsStore } from '../../stores'
+import { getUsername } from '$lib/auth'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
 
@@ -130,6 +131,64 @@ export const savePreset = async (preset: Patch) => {
 }
 
 /**
+ * Batch write all presets before publishing to the file system
+ *
+ * @param presets Patch[]
+ */
+export const saveAllPresets = async (presets: Patch[]) => {
+  const fs = getStore(fileSystemStore)
+
+  const updatedPresets = await Promise.all(presets.map(async (preset) => {
+    const updatedPreset = {
+      ...preset,
+      creator: getUsername(),
+    }
+
+    const contentPath = webnative.path.combine(PRESETS_DIRS[updatedPreset.visibility], webnative.path.file(`${updatedPreset?.id}.json`))
+
+    await fs?.write(
+      contentPath,
+      new TextEncoder().encode(JSON.stringify(updatedPreset))
+    )
+
+    return updatedPreset
+  }))
+
+  console.log('updatedPresets', updatedPresets)
+
+  await fs?.publish()
+
+  await Promise.all(updatedPresets.map(async (preset) => {
+    presetsStore.update((state) => {
+      const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+      originalPresets = JSON.parse(JSON.stringify(updatedPresets))
+
+      return {
+        ...state,
+        presets: updatedPresets,
+      }
+    })
+
+
+    // Update patchStore if it currently contains this preset
+    const patch = getStore(patchStore)
+    if (patch.id === preset?.id) {
+      patchStore.update(() => preset)
+    }
+
+    const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
+
+    const storedPreset = JSON.parse(new TextDecoder().decode(
+      await fs?.read(contentPath)
+    )) as Patch
+
+    console.log('stored preset', storedPreset)
+
+    return storedPreset
+  }))
+}
+
+/**
  * Delete preset from the file system and remove it from the preset list
  *
  * @param preset Patch
@@ -148,6 +207,8 @@ export const deletePreset = async (preset: Patch) => {
     selectedCategory: DEFAULT_CATEGORIES[0],
     selectedPatch: DEFAULT_PATCH.id,
   }))
+
+  patchStore.update(() => DEFAULT_PATCH)
 }
 
 /**
@@ -166,23 +227,4 @@ export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
    categories.sort((a, b) => a.localeCompare(b, 'en', {'sensitivity': 'base'}))
 
   return [...DEFAULT_CATEGORIES, ...categories]
-}
-
-/**
- * Store patches to either a public or private file system
- *
- * @param presets Presets to store
- * @param visibility Visibility
- * @returns Promise<Patch[]>
- */
-export const storeToFilesystem: (presets: Patch[], visibility: Visibility) => Promise<void> = async (presets, visibility) => {
-  const fs = getStore(fileSystemStore)
-
-  await Promise.all(presets.map(async preset => {
-    await fs?.write(
-      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(`${preset?.id}.json`)),
-      new TextEncoder().encode(JSON.stringify(preset))
-      )
-  }))
-  await fs?.publish()
 }

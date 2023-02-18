@@ -84,6 +84,15 @@
     feedback: '818CF8',
     mix: '83F42C',
   }
+
+  $: {
+    rotation = translateToRange({
+      num: value,
+      original: { min, max },
+      scaled: { min: -132, max: 132 }
+    })
+    strokeDashOffset = getStrokeDashOffset(rotation)
+  }
 </script>
 
 <div
@@ -99,6 +108,7 @@
       <div
         style:transform={`translate(-50%, -50%) rotate(${rotation}deg)`}
         on:mousedown={handleMouseDown}
+        class="transition-transform"
       />
 
       <svg viewBox="0 0 100 100">

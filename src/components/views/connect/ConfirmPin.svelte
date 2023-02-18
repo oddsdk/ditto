@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import { fly } from 'svelte/transition'
 
   export let confirmPin: () => void
   export let pin: number[]
@@ -27,7 +28,7 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center h-full-no-header gap-6">
+<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center h-full-no-header gap-6">
   <h2 class="text-lg">
     Enter the connection code from the Ditto app to approve the connection.
   </h2>

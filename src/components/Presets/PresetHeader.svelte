@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
 
-  import { notificationStore, patchStore, sessionStore } from '../../stores'
+  import { notificationStore, patchStore } from '../../stores'
   import ArrowLeft from '$components/icons/ArrowLeft.svelte'
   import ArrowRight from '$components/icons/ArrowRight.svelte'
   import Favorite from '$components/icons/Favorite.svelte'
@@ -26,7 +26,7 @@
   })
 </script>
 
-<div class="relative flex gap-2 min-w-[450px] items-center justify-between translate-x-[55px] p-2 rounded-lg border-2 text-slate-900 hover:border-secondary/50 transition-colors ease-in-out bg-base-300 {borderColor}">
+<div class="relative flex gap-2 min-w-[450px] max-w-[300px] text-ellipsis overflow-hidden items-center justify-between translate-x-[70px] p-2 rounded-lg border-2 text-slate-900 hover:border-secondary/50 transition-colors ease-in-out bg-base-300 {borderColor}">
   <Notifications />
 
   <!-- {#if !isDefault} -->

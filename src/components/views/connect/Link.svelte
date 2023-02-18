@@ -1,5 +1,6 @@
 <script lang="ts">
   import clipboardCopy from 'clipboard-copy'
+  import { fly } from 'svelte/transition'
   import QRCode from 'qrcode-svg'
 
   import { dittoAppURL } from '$lib/auth'
@@ -26,7 +27,7 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center h-full-no-header gap-6">
+<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center h-full-no-header gap-6">
   <div class="rounded-lg overflow-hidden">{@html qrcode}</div>
   <span class="text-lg">Scan this code, or share the connection link</span>
   <button class="btn btn-outline" on:click={copyLink}>
