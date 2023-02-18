@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition'
   import * as webnative from 'webnative'
 
   import { fileSystemStore, programStore, sessionStore } from '../../../stores'
@@ -92,7 +93,7 @@
     (!usernameValid || !usernameAvailable)
 </script>
 
-<div class="flex flex-col items-center justify-center h-full-no-header gap-2">
+<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center h-full-no-header gap-2">
   <h2 class="text-lg font-semibold">Connect to sync your presets to the web.</h2>
   <div id="connect" class="form-control w-full max-w-xs gap-4">
     <div>

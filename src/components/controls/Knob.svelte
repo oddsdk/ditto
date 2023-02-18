@@ -108,6 +108,7 @@
       <div
         style:transform={`translate(-50%, -50%) rotate(${rotation}deg)`}
         on:mousedown={handleMouseDown}
+        class="transition-transform"
       />
 
       <svg viewBox="0 0 100 100">
