@@ -6,7 +6,6 @@
   import {
     loadFromFilesystem as loadPresets,
     savePreset,
-    storeToFilesystem as storePresets
   } from '$lib/presets'
   import { getUsername, usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
@@ -64,17 +63,14 @@
             // Load presets from local-only filesystem
             const presets = await loadPresets(Visibility.private)
 
+            // Switch to persistent filesystem
+            fileSystemStore.set(fs)
+
             // Update the creator field of each preset with the username
             await Promise.all(presets.map(async (preset) => savePreset({
               ...preset,
               creator: getUsername(),
             })))
-
-            // Switch to persistent filesystem
-            fileSystemStore.set(fs)
-
-            // Store presets in persistent filesystem
-            await storePresets(presets, Visibility.private)
           } else {
             console.error('File system missing on session at registration')
           }
