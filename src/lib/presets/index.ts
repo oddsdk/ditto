@@ -210,6 +210,8 @@ export const deletePreset = async (preset: Patch) => {
     selectedCategory: DEFAULT_CATEGORIES[0],
     selectedPatch: DEFAULT_PATCH.id,
   }))
+
+  patchStore.update(() => DEFAULT_PATCH)
 }
 
 /**
