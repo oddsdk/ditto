@@ -54,7 +54,7 @@
   {#if preset?.tags?.length}
     <div class="flex items-start justify-start capitalize">
       <span class="text-sm font-semibold">Tags:</span>
-      <div>
+      <div class="-translate-y-0.5">
         {#each preset.tags as tag}
           <div on:click={() => handleCategoryClick(tag)} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 mb-2 inline-block hover:bg-secondary/70 hover:border-secondary/70 ease-in-out {$presetsStore.selectedCategory === tag ? 'bg-secondary/70 border-secondary/70' : ''}">{tag}</div>
         {/each}

@@ -4,6 +4,7 @@
   import { fileSystemStore, programStore, sessionStore } from '../../../stores'
   import {
     loadFromFilesystem as loadPresets,
+    savePreset,
     storeToFilesystem as storePresets
   } from '$lib/presets'
   import { usernamePrefix } from '$lib/auth'
@@ -61,6 +62,12 @@
 
             // Load presets from local-only filesystem
             const presets = await loadPresets(Visibility.private)
+
+            // Update the creator field of each preset with the username
+            await Promise.all(presets.map(async (preset) => savePreset({
+              ...preset,
+              creator: session.username,
+            })))
 
             // Switch to persistent filesystem
             fileSystemStore.set(fs)
