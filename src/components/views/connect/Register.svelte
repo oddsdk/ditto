@@ -7,7 +7,7 @@
     savePreset,
     storeToFilesystem as storePresets
   } from '$lib/presets'
-  import { usernamePrefix } from '$lib/auth'
+  import { getUsername, usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
   import { Visibility } from '$lib/patch'
 
@@ -66,7 +66,7 @@
             // Update the creator field of each preset with the username
             await Promise.all(presets.map(async (preset) => savePreset({
               ...preset,
-              creator: session.username,
+              creator: getUsername(),
             })))
 
             // Switch to persistent filesystem
