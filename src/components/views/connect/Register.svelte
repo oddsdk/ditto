@@ -5,7 +5,6 @@
   import {
     loadFromFilesystem as loadPresets,
     savePreset,
-    storeToFilesystem as storePresets
   } from '$lib/presets'
   import { getUsername, usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
@@ -71,9 +70,6 @@
               ...preset,
               creator: getUsername(),
             })))
-
-            // Store presets in persistent filesystem
-            await storePresets(presets, Visibility.private)
           } else {
             console.error('File system missing on session at registration')
           }

@@ -167,22 +167,3 @@ export const deriveCategoriesFromPresets = (presets: Patch[]): string[] => {
 
   return [...DEFAULT_CATEGORIES, ...categories]
 }
-
-/**
- * Store patches to either a public or private file system
- *
- * @param presets Presets to store
- * @param visibility Visibility
- * @returns Promise<Patch[]>
- */
-export const storeToFilesystem: (presets: Patch[], visibility: Visibility) => Promise<void> = async (presets, visibility) => {
-  const fs = getStore(fileSystemStore)
-
-  await Promise.all(presets.map(async preset => {
-    await fs?.write(
-      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(`${preset?.id}.json`)),
-      new TextEncoder().encode(JSON.stringify(preset))
-      )
-  }))
-  await fs?.publish()
-}
