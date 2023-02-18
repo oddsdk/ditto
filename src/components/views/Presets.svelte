@@ -2,7 +2,7 @@
   import {  onDestroy } from 'svelte'
   import { fly } from 'svelte/transition'
 
-  import { patchStore, presetsStore } from '../../stores'
+  import { patchStore, presetsStore, sessionStore } from '../../stores'
   import type { Patch } from '$lib/patch'
   import AddPreset from '$components/presets/AddPreset.svelte'
   import ClearSearch from '$components/icons/ClearSearch.svelte'
@@ -19,22 +19,7 @@
   let presets = $presetsStore.presets
   let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
 
-  const unsubscribePresetsStore = presetsStore.subscribe((state) => {
-    selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
-
-    if (!maintainPresetSorting) {
-      presets = state.presets
-    }
-  })
-
-  // Update the selectedCategory and load the associated presets column
-  const handleCategoryClick = (category: string): void => {
-    maintainPresetSorting = true
-    presetsStore.update((state) => ({
-      ...state,
-      selectedCategory: category,
-    }))
-
+  const filterByCategory = (category: string): void => {
     switch (category) {
       case $presetsStore.categories[0]:
         presets = $presetsStore.presets
@@ -48,6 +33,26 @@
         presets = $presetsStore.presets.filter((preset) => preset.tags.includes(category))
         break
     }
+  }
+
+  const unsubscribePresetsStore = presetsStore.subscribe((state) => {
+    selectedPreset = state.presets.find(({ id }) => id === state.selectedPatch) as Patch
+
+    if (!maintainPresetSorting) {
+      presets = state.presets
+      filterByCategory(state.selectedCategory)
+    }
+  })
+
+  // Update the selectedCategory and load the associated presets column
+  const handleCategoryClick = (category: string): void => {
+    maintainPresetSorting = true
+    presetsStore.update((state) => ({
+      ...state,
+      selectedCategory: category,
+    }))
+
+    filterByCategory(category)
 
     adding = false
     editing = false
@@ -118,10 +123,10 @@
     </div>
     <PresetsTable {presets} {handlePresetClick} {isSearching} />
 
-    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 bottom-4 text-white"><Plus /></button>
+    <button on:click={handleAddPresetClick} in:fly={{ y: 20, duration: 400 }} class="btn btn-primary btn-2xl hover:scale-105 duration-250 ease-in-out rounded-lg absolute right-4 {!$sessionStore.connectedStatus ? 'bottom-12' : 'bottom-4'} text-white"><Plus /></button>
   </div>
 
-  <div class="col-span-2 pt-5 px-6 bg-base-300">
+  <div class="col-span-2 pt-5 pr-6 pl-4 bg-base-300">
     {#if adding}
       <AddPreset handleCancelClick={() => adding = false} />
     {:else}

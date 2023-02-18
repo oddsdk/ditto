@@ -19,7 +19,7 @@ export const addNotification: (
   msg: string,
   type?: NotificationType,
   timeout?: number
-) => void = (msg, type = 'info', timeout = 5000) => {
+) => void = (msg, type = 'info', timeout = 3000) => {
   // uuid for each notification
   const id = crypto.randomUUID()
 

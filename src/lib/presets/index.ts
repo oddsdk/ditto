@@ -12,6 +12,8 @@ export type Presets = {
   selectedPatch: string
 }
 
+export let originalPresets: Patch[] = []
+
 /**
  * Load patches from either a public or private file system
  *
@@ -51,6 +53,7 @@ export const hydratePresetsStore = async () => {
   const publicPresets = await loadFromFilesystem(Visibility.public)
   const privatePresets = await loadFromFilesystem(Visibility.private)
   const presets = [DEFAULT_PATCH, ...publicPresets, ...privatePresets].sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+  originalPresets = JSON.parse(JSON.stringify(presets))
 
   presetsStore.set({
     categories: deriveCategoriesFromPresets(presets),
@@ -103,10 +106,15 @@ export const savePreset = async (preset: Patch) => {
   )
   await fs?.publish()
 
-  presetsStore.update((state) => ({
-    ...state,
-    presets: addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'})),
-  }))
+  presetsStore.update((state) => {
+    const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+    originalPresets = JSON.parse(JSON.stringify(updatedPresets))
+
+    return {
+      ...state,
+      presets: updatedPresets,
+    }
+  })
 
   const storedPreset = JSON.parse(new TextDecoder().decode(
     await fs?.read(contentPath)

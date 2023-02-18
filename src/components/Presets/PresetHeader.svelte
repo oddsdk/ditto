@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
 
-  import { notificationStore, patchStore } from '../../stores'
+  import { notificationStore, patchStore, sessionStore } from '../../stores'
   import ArrowLeft from '$components/icons/ArrowLeft.svelte'
   import ArrowRight from '$components/icons/ArrowRight.svelte'
   import Favorite from '$components/icons/Favorite.svelte'

@@ -2,7 +2,9 @@
   import { el } from '@elemaudio/core'
   import { default as core } from '@elemaudio/plugin-renderer'
 
+  import { sessionStore } from '../stores'
   import { initialize } from '$lib/init'
+  import { clearStorage } from '$lib/filesystem'
   import type { Channels } from '$lib/audio/index'
   import Effect from '$components/views/Effect.svelte'
   import CloseIcon from '$components/icons/Close.svelte'
@@ -12,6 +14,8 @@
   import PresetHeader from '$components/presets/PresetHeader.svelte'
   import Presets from '$components/views/Presets.svelte'
   import PresetsIcon from '$components/icons/Presets.svelte'
+  // import Sync from '$components/icons/Sync.svelte'
+  import UnsavedChanges from '$components/icons/UnsavedChanges.svelte'
 
   type View = 'connect' | 'effect' | 'presets'
 
@@ -37,6 +41,7 @@
   async function init() {
     loading = true
     await initialize()
+    // await clearStorage()
     loading = false
   }
 
@@ -64,15 +69,17 @@
           </div>
           <PresetHeader on:click={setView} />
         </div>
-        <!-- {#if view === 'effect'} -->
-        <div class="grid grid-flow-col auto-cols pt-1 pr-5 gap-5 justify-end">
+        <div class="relative flex items-center justify-end pr-5 gap-5">
+          <!-- {#if $sessionStore.connectedStatus}
+            <Sync />
+          {/if} -->
+          <UnsavedChanges />
           {#if view === 'connect'}
             <CloseIcon on:click={setView} />
           {:else}
             <ConnectIcon on:click={setView} />
           {/if}
         </div>
-        <!-- {/if} -->
       </div>
       <div class="relative pl-4">
         {#if view === 'effect'}
@@ -83,6 +90,9 @@
           <Presets />
         {/if}
       </div>
+    {/if}
+    {#if !loading && !$sessionStore.connectedStatus}
+      <div class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace">Presets will only be saved to locally until you connect with the Ditto companion app</div>
     {/if}
   </div>
 {/if}
