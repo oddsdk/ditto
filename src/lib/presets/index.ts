@@ -5,7 +5,6 @@ import { fileSystemStore, patchStore, presetsStore } from '../../stores'
 import { getUsername } from '$lib/auth'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
-import { addNotification } from '$lib/notifications'
 
 export type Presets = {
   categories: string[]
@@ -187,8 +186,6 @@ export const saveAllPresets = async (presets: Patch[]) => {
 
     return storedPreset
   }))
-
-  addNotification('Presets copied', 'success')
 }
 
 /**
