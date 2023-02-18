@@ -84,6 +84,15 @@
     feedback: '818CF8',
     mix: '83F42C',
   }
+
+  $: {
+    rotation = translateToRange({
+      num: value,
+      original: { min, max },
+      scaled: { min: -132, max: 132 }
+    })
+    strokeDashOffset = getStrokeDashOffset(rotation)
+  }
 </script>
 
 <div
