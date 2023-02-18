@@ -5,9 +5,9 @@
   import { fileSystemStore, programStore, sessionStore } from '../../../stores'
   import {
     loadFromFilesystem as loadPresets,
-    savePreset,
+    saveAllPresets,
   } from '$lib/presets'
-  import { getUsername, usernamePrefix } from '$lib/auth'
+  import { usernamePrefix } from '$lib/auth'
   import type { Program } from 'webnative'
   import { Visibility } from '$lib/patch'
 
@@ -67,10 +67,7 @@
             fileSystemStore.set(fs)
 
             // Update the creator field of each preset with the username
-            await Promise.all(presets.map(async (preset) => savePreset({
-              ...preset,
-              creator: getUsername(),
-            })))
+            await saveAllPresets(presets)
           } else {
             console.error('File system missing on session at registration')
           }

@@ -2,8 +2,10 @@ import * as webnative from 'webnative'
 import { get as getStore } from 'svelte/store'
 
 import { fileSystemStore, patchStore, presetsStore } from '../../stores'
+import { getUsername } from '$lib/auth'
 import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
+import { addNotification } from '$lib/notifications'
 
 export type Presets = {
   categories: string[]
@@ -127,6 +129,64 @@ export const savePreset = async (preset: Patch) => {
   }
 
   console.log('saved preset', storedPreset)
+}
+
+/**
+ * Batch write all presets before publishing to the file system
+ *
+ * @param presets Patch[]
+ */
+export const saveAllPresets = async (presets: Patch[]) => {
+  const fs = getStore(fileSystemStore)
+
+  const updatedPresets = await Promise.all(presets.map(async (preset) => {
+    const updatedPreset = {
+      ...preset,
+      creator: getUsername(),
+    }
+
+    const contentPath = webnative.path.combine(PRESETS_DIRS[updatedPreset.visibility], webnative.path.file(`${updatedPreset?.id}.json`))
+
+    // Check for duplicate preset in the opposite directory and remove it
+    const oppositeDirectory = updatedPreset.visibility === Visibility.private ? Visibility.public : Visibility.private
+    const oppositeContentPath = webnative.path.combine(PRESETS_DIRS[oppositeDirectory], webnative.path.file(`${updatedPreset?.id}.json`))
+    const exists = await fs?.exists(oppositeContentPath)
+    if (exists) {
+      await fs?.rm(
+        oppositeContentPath
+      )
+    }
+
+    await fs?.write(
+      contentPath,
+      new TextEncoder().encode(JSON.stringify(updatedPreset))
+    )
+
+    return updatedPreset
+  }))
+
+  await fs?.publish()
+
+  updatedPresets.forEach((preset) => {
+    presetsStore.update((state) => {
+      const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+      originalPresets = JSON.parse(JSON.stringify(updatedPresets))
+
+      return {
+        ...state,
+        presets: updatedPresets,
+      }
+    })
+
+
+    // Update patchStore if it currently contains this preset
+    const patch = getStore(patchStore)
+    if (patch.id === preset?.id) {
+      patchStore.update(() => preset)
+    }
+  })
+
+  addNotification('Presets copied', 'success')
 }
 
 /**
