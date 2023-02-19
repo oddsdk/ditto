@@ -2,6 +2,7 @@
   import { fly } from 'svelte/transition'
 
   import type { Patch } from '$lib/patch'
+  import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
   import { presetsStore } from '../../stores'
   import Delete from '$components/icons/Delete.svelte'
   import Edit from '$components/icons/Edit.svelte'
@@ -56,7 +57,13 @@
       <span class="text-sm font-semibold">Tags:</span>
       <div class="-translate-y-0.5">
         {#each preset.tags as tag}
-          <div on:click={() => handleCategoryClick(tag)} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 mb-1.5 inline-block hover:bg-secondary/70 hover:border-secondary/70 ease-in-out {$presetsStore.selectedCategory === tag ? 'bg-secondary/70 border-secondary/70' : ''}">{tag}</div>
+          <div on:click={() => {
+            if ($presetsStore.selectedCategory === tag) {
+              presetsStore.update((state) => ({ ...state, selectedCategory: DEFAULT_CATEGORIES[0] }))
+            } else {
+              handleCategoryClick(tag)
+            }
+          }} on:keydown={() => handleCategoryClick(tag)} class="badge badge-slate-900 pb-5 cursor-pointer text-base-100 ml-2 mb-1.5 inline-block hover:bg-secondary/70 hover:border-secondary/70 ease-in-out {$presetsStore.selectedCategory === tag ? 'bg-secondary/70 border-secondary/70' : ''}">{tag}</div>
         {/each}
       </div>
     </div>
