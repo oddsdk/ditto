@@ -10,6 +10,7 @@
   import Connect from '$components/views/Connect.svelte'
   import ConnectIcon from '$components/icons/Connect.svelte'
   import LoadingSpinner from '$components/common/LoadingSpinner.svelte'
+  import Logo from '$components/icons/Logo.svelte'
   import PresetHeader from '$components/presets/PresetHeader.svelte'
   import Presets from '$components/views/Presets.svelte'
   import PresetsIcon from '$components/icons/Presets.svelte'
@@ -56,9 +57,9 @@
       <LoadingSpinner />
     {:else}
       <div class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b">
-        <h2 class="text-2xl font-mono cursor-pointer">Ditto</h2>
+        <Logo on:click={setView} />
         <div class="relative max-w-[500px] flex items-center justify-center">
-          <div class="absolute left-[68px]">
+          <div class="absolute left-[54px]">
             {#if  view === 'presets'}
               <CloseIcon on:click={setView} />
             {:else if view === 'effect' || view === 'connect'}
