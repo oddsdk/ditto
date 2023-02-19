@@ -6,8 +6,7 @@ import type { Configuration } from 'webnative'
 import { sessionStore } from '../../stores'
 import { asyncDebounce } from '$lib/utils'
 
-// export const dittoAppURL = 'https://ditto.fission.app'
-export const dittoAppURL = 'localhost:5173'
+export const dittoAppURL = 'https://long-round-glass-crow.fission.app'
 export const usernamePrefix = 'ditto-'
 
 
