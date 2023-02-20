@@ -16,8 +16,13 @@
   }
 </script>
 
-<div in:fly={{ y: 20, duration: 400 }} class="flex flex-col items-center justify-center auto-rows gap-4 h-full-no-header">
-  <div class="font-semibold text-lg">You've already connected with the Ditto web app.</div>
+<div
+  in:fly={{ y: 20, duration: 400 }}
+  class="flex flex-col items-center justify-center auto-rows gap-4 h-full-no-header"
+>
+  <div class="font-semibold text-lg">
+    You've connected with the Ditto web app.
+  </div>
   <div class="flex gap-4 items-ceneter justify-center">
     <button class="btn btn-primary" on:click={copyLink}>Copy app link</button>
     <button class="btn btn-outline" on:click={handleRelink}>
