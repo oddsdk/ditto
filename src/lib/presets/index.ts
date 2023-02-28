@@ -3,7 +3,7 @@ import { get as getStore } from 'svelte/store'
 
 import { fileSystemStore, patchStore, presetsStore } from '../../stores'
 import { getUsername } from '$lib/auth'
-import { DEFAULT_PATCH, Visibility, type  Patch } from '$lib/patch'
+import { DEFAULT_PATCH, Visibility, type Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES, PRESETS_DIRS } from '$lib/presets/constants'
 
 export type Presets = {
@@ -137,31 +137,33 @@ export const savePreset = async (preset: Patch) => {
  */
 export const saveAllPresets = async (presets: Patch[]) => {
   const fs = getStore(fileSystemStore)
+  const username = getUsername()
 
-  const updatedPresets = await Promise.all(presets.map(async (preset) => {
+  const updatedPresets = []
+
+  // Update and write presets sequentially
+  for (const preset of presets) {
     const updatedPreset = {
       ...preset,
-      creator: getUsername(),
+      creator: username
     }
 
-    const contentPath = webnative.path.combine(PRESETS_DIRS[updatedPreset.visibility], webnative.path.file(`${updatedPreset?.id}.json`))
+    const contentPath = webnative.path.combine(PRESETS_DIRS[ updatedPreset.visibility ], webnative.path.file(`${updatedPreset?.id}.json`))
 
     await fs?.write(
       contentPath,
       new TextEncoder().encode(JSON.stringify(updatedPreset))
     )
 
-    return updatedPreset
-  }))
-
-  console.log('updatedPresets', updatedPresets)
+    updatedPresets.push(updatedPreset)
+  }
 
   await fs?.publish()
 
-  await Promise.all(updatedPresets.map(async (preset) => {
+  await Promise.all(updatedPresets.map((preset) => {
+    // Update presets store
     presetsStore.update((state) => {
-      const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
-      originalPresets = JSON.parse(JSON.stringify(updatedPresets))
+      const updatedPresets = addOrUpdate(state.presets, preset).sort((a, b) => a.name.localeCompare(b.name, 'en', { 'sensitivity': 'base' }))
 
       return {
         ...state,
@@ -169,22 +171,11 @@ export const saveAllPresets = async (presets: Patch[]) => {
       }
     })
 
-
     // Update patchStore if it currently contains this preset
     const patch = getStore(patchStore)
     if (patch.id === preset?.id) {
       patchStore.update(() => preset)
     }
-
-    const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
-
-    const storedPreset = JSON.parse(new TextDecoder().decode(
-      await fs?.read(contentPath)
-    )) as Patch
-
-    console.log('stored preset', storedPreset)
-
-    return storedPreset
   }))
 }
 
