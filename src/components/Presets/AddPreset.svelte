@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition'
+
   import { version } from '../../../package.json'
   import { patchStore, presetsStore } from '../../stores'
   import { addNotification } from '$lib/notifications'
@@ -58,7 +60,7 @@
   }
 </script>
 
-<form on:submit={handleSubmit}>
+<form on:submit={handleSubmit} in:fly={{ x: -20, duration: 400 }}>
   <h1 class="text-2xl font-bold mb-4">New Preset</h1>
 
   <label for="name" class="mb-1 text-xs">Name</label>
