@@ -2,7 +2,7 @@
   import {  onDestroy } from 'svelte'
   import { fly } from 'svelte/transition'
 
-  import { patchStore, presetsStore, sessionStore } from '../../stores'
+  import { patchStore, presetsStore, sessionStore, viewStore } from '../../stores'
   import type { Patch } from '$lib/patch'
   import AddPreset from '$components/presets/AddPreset.svelte'
   import ClearSearch from '$components/icons/ClearSearch.svelte'
@@ -13,8 +13,6 @@
   import Search from '$components/icons/Search.svelte'
 
   let isSearching = false
-  let adding = false
-  let editing = false
   let maintainPresetSorting = false
   let presets = $presetsStore.presets
   let selectedPreset = $presetsStore.presets.find(({ id }) => id === $presetsStore.selectedPatch) as Patch
@@ -44,6 +42,12 @@
     }
   })
 
+  // Revert to preset detail view
+  const handleCancelClick = () => viewStore.update((state) => ({
+    ...state,
+    presetsView: 'view',
+  }))
+
   // Update the selectedCategory and load the associated presets column
   const handleCategoryClick = (category: string): void => {
     maintainPresetSorting = true
@@ -54,8 +58,7 @@
 
     filterByCategory(category)
 
-    adding = false
-    editing = false
+
     maintainPresetSorting = false
   }
 
@@ -71,8 +74,7 @@
 
     patchStore.update(() => ({ ...selectedPreset  }))
 
-    adding = false
-    editing = false
+    handleCancelClick()
     maintainPresetSorting = false
   }
 
@@ -90,10 +92,7 @@
   }
 
   // Handle "Add Preset" button click
-  const handleAddPresetClick = () => adding = true
-
-  // Toggle edit view
-  const handleEditClick = () => editing = !editing
+  const handleAddPresetClick = () => viewStore.update((state) => ({ ...state, presetsView: 'add' }))
 
   onDestroy(unsubscribePresetsStore)
 </script>
@@ -127,14 +126,12 @@
   </div>
 
   <div class="col-span-2 pt-5 pr-6 pl-4 bg-base-300">
-    {#if adding}
-      <AddPreset handleCancelClick={() => adding = false} />
+    {#if $viewStore.presetsView === 'add'}
+      <AddPreset {handleCancelClick} />
+    {:else if $viewStore.presetsView === 'edit'}
+      <EditPreset {handleCancelClick} preset={selectedPreset} />
     {:else}
-      {#if editing}
-        <EditPreset handleCancelClick={handleEditClick} preset={selectedPreset} />
-      {:else}
-        <PresetInfo {handleEditClick} {handleCategoryClick} preset={selectedPreset} />
-      {/if}
+      <PresetInfo {handleCategoryClick} preset={selectedPreset} />
     {/if}
   </div>
 </div>

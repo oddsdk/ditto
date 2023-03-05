@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
-
-  const dispatch = createEventDispatcher()
+  import { viewStore } from '../../stores'
 
   function handleClick() {
-    dispatch('click', { view: 'effect' })
+    viewStore.update((state) => ({ ...state, globalView: 'effect', presetsView: 'view' }))
   }
 </script>
 

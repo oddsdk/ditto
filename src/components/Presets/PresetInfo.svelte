@@ -3,14 +3,19 @@
 
   import type { Patch } from '$lib/patch'
   import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
-  import { presetsStore } from '../../stores'
+  import { presetsStore, viewStore } from '../../stores'
   import Delete from '$components/icons/Delete.svelte'
   import Edit from '$components/icons/Edit.svelte'
   import Favorite from '$components/icons/Favorite.svelte'
 
   export let preset: Patch
-  export let handleEditClick: () => void
   export let handleCategoryClick: (category: string) => void
+
+  const handleEditClick = () => viewStore.update((state) => ({
+    ...state,
+    presetsView: 'edit',
+  }))
+
 
   $: isDefault = preset?.id === 'default'
 </script>
