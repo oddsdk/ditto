@@ -31,3 +31,14 @@ Build the project:
 ```bash
 npm run build
 ```
+
+## Keyboard Shortcuts
+
+- `esc` - Navigate to home screen
+- `n` - Create new preset
+- `e` - Edit selected preset
+- `c` - Navigate to connection screen
+- `l` - View presets list
+- `left/up` - Previous preset
+- `right/down` - Next preset
+- `shift` - View keyboard shortcuts menu
