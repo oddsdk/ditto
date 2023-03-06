@@ -35,7 +35,7 @@
       globalView: 'presets',
       presetsView: 'add',
     })),
-    p: () => viewStore.update((state) => ({
+    l: () => viewStore.update((state) => ({
       ...state,
       globalView: 'presets',
       presetsView: 'view',
