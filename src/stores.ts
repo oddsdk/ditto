@@ -6,6 +6,7 @@ import { DEFAULT_PATCH, type Patch } from '$lib/patch'
 import { DEFAULT_CATEGORIES } from '$lib/presets/constants'
 import type { Session } from '$lib/auth/session'
 import type { Presets } from '$lib/presets'
+import type { Views } from '$lib/views'
 
 export const fileSystemStore: Writable<webnative.FileSystem | null> = writable(null)
 
@@ -40,3 +41,9 @@ export const authStore: Readable<{
       session: $session.session
     }
   })
+
+export const viewStore: Writable<Views> = writable({
+  globalView: 'effect',
+  presetsView: 'view',
+  showShortcuts: false
+})

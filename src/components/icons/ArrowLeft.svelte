@@ -9,7 +9,7 @@
     presetsStore.update((state) => ({ ...state, selectedPatch: $presetsStore.presets[prevIndex].id }))
   }
 
-// Enable keyboard navigation if the user has not focused on a form element
+  // Enable keyboard navigation if the user has not focused on a form element
   const handleKeyDown = (event: KeyboardEvent) => {
     const tagName = (event?.target as HTMLElement).tagName.toLowerCase()
     const key = event.key

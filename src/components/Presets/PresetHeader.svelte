@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
-
-  import { notificationStore, patchStore } from '../../stores'
+  import { notificationStore, patchStore, viewStore } from '../../stores'
   import ArrowLeft from '$components/icons/ArrowLeft.svelte'
   import ArrowRight from '$components/icons/ArrowRight.svelte'
   import Favorite from '$components/icons/Favorite.svelte'
@@ -9,10 +7,8 @@
 
   $: isDefault = $patchStore.id === 'default'
 
-  const dispatch = createEventDispatcher()
-
   const handleClick = () => {
-    dispatch('click', { view: 'presets' })
+    viewStore.update((state) => ({ ...state, globalView: 'presets', presetsView: 'view' }))
   }
 
   // Change border colours based on notification type

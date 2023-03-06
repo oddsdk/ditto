@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { viewStore } from '../../stores'
 
   let strokeWidth = 1.5
 
-  const dispatch = createEventDispatcher()
-
   function handleClick() {
-    dispatch('click', { view: 'effect' })
+    viewStore.update((state) => ({ ...state, globalView: 'effect', presetsView: 'view' }))
   }
 </script>
 
