@@ -49,12 +49,15 @@
   // Only register key strokes from the keyMap
   const allowedKeys = Object.keys(keyMap)
 
+  // Shortcuts are disabled if these elements are focused on
+  const formElements = ['input', 'select', 'textarea']
+
   // Enable global keyboard shortcuts if the user has not focused on a form element
   const handleKeyDown = (event: KeyboardEvent): void => {
     const tagName = (event?.target as HTMLElement).tagName.toLowerCase()
     const key = event.key
 
-    if (!['input', 'select', 'textarea'].includes(tagName) && allowedKeys.includes(key)) {
+    if (!formElements.includes(tagName) && allowedKeys.includes(key)) {
       keyMap[key]()
     }
   }
@@ -63,7 +66,7 @@
     const tagName = (event?.target as HTMLElement).tagName.toLowerCase()
     const key = event.key
 
-    if (!['input', 'select', 'textarea'].includes(tagName) && key === 'Shift') {
+    if (!formElements.includes(tagName) && key === 'Shift') {
       viewStore.update((state) => ({
         ...state,
         showShortcuts: false,
