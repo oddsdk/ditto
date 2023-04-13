@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type * as webnative from 'webnative'
+  import type * as odd from '@oddjs/odd'
   import { onDestroy } from 'svelte'
-  import type { AccountLinkingProducer } from 'webnative'
+  import type { AccountLinkingProducer } from '@oddjs/odd'
 
   import { authStore, viewStore } from '../../stores'
   import { setConnectedStatus } from '$lib/auth/connected'
@@ -12,8 +12,8 @@
 
   type View = 'register' | 'link' | 'confirm-pin' | 'connected'
 
-  let authStrategy: webnative.AuthenticationStrategy | null
-  let session: webnative.Session | null
+  let authStrategy: odd.AuthenticationStrategy | null
+  let session: odd.Session | null
   let username = ''
 
   let accountLinkingProducer: AccountLinkingProducer
@@ -58,9 +58,9 @@
   function handleLinkingCanceled() {
     if (accountLinkingProducer) accountLinkingProducer.cancel()
 
-    viewStore.update((state) => ({
+    viewStore.update(state => ({
       ...state,
-      globalView: 'effect',
+      globalView: 'effect'
     }))
   }
 

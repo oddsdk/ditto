@@ -1,12 +1,12 @@
-import * as webnative from 'webnative'
-import { createEmitter, type FileSystem as FileSystemEvents } from 'webnative/events'
-import { isCID } from 'webnative/fs/types/check'
-import { type CID, decodeCID, encodeCID } from 'webnative/common/cid'
-import { FileSystem, type Program } from 'webnative'
+import * as odd from '@oddjs/odd'
+import { createEmitter, type FileSystem as FileSystemEvents } from '@oddjs/odd/events'
+import { isCID } from '@oddjs/odd/fs/types/check'
+import { type CID, decodeCID, encodeCID } from '@oddjs/odd/common/cid'
+import { FileSystem, type Program } from '@oddjs/odd'
 
 const LOCAL_ONLY_FS_KEY = 'local-only-fs'
 
-function setupHooks(fs: webnative.FileSystem, program: Program): void {
+function setupHooks(fs: odd.FileSystem, program: Program): void {
   fs.publish = async function () {
     const cid: CID = await this.root.put()
     await program.components.storage.setItem(LOCAL_ONLY_FS_KEY, encodeCID(cid))
@@ -18,9 +18,9 @@ function setupHooks(fs: webnative.FileSystem, program: Program): void {
  * Retrieves a local-only filesystem or creates a new filesystem if
  * does not exist.
  * 
- * @param program a Webnative program
+ * @param program an ODD program
  */
-async function localOnlyFileSystem(program: Program): Promise<webnative.FileSystem> {
+async function localOnlyFileSystem(program: Program): Promise<odd.FileSystem> {
   const account = { rootDID: await program.agentDID() }
   const dependencies = program.components
   const fsEvents = createEmitter<FileSystemEvents>()
@@ -53,8 +53,8 @@ async function localOnlyFileSystem(program: Program): Promise<webnative.FileSyst
   return newFs
 }
 
-export function getLocalOnlyFs(): Promise<webnative.FileSystem> {
-  return webnative
+export function getLocalOnlyFs(): Promise<odd.FileSystem> {
+  return odd
     .program({
       namespace: 'local-only',
       debug: true

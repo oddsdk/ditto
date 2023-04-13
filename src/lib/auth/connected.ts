@@ -1,4 +1,4 @@
-import * as webnative from 'webnative'
+import * as odd from '@oddjs/odd'
 import { sessionStore } from '../../stores'
 
 export type ConnectedStatus = { connected: boolean }
@@ -14,10 +14,10 @@ export function isConnectedStatus(status: unknown): status is ConnectedStatus {
 }
 
 export async function checkConnectedStatus(
-  fs: webnative.FileSystem
+  fs: odd.FileSystem
 ): Promise<boolean> {
   const statusExists = await fs.exists(
-    webnative.path.file('private', 'connectedStatus')
+    odd.path.file('private', 'connectedStatus')
   )
 
   if (statusExists) {
@@ -25,7 +25,7 @@ export async function checkConnectedStatus(
     // eslint-disable-next-line
     const status: ConnectedStatus = JSON.parse(
       new TextDecoder().decode(
-        await fs.read(webnative.path.file('private', 'connectedStatus'))
+        await fs.read(odd.path.file('private', 'connectedStatus'))
       )
     )
 
@@ -37,14 +37,14 @@ export async function checkConnectedStatus(
   return false
 }
 
-export async function setConnectedStatus(fs: webnative.FileSystem, status: boolean) {
+export async function setConnectedStatus(fs: odd.FileSystem, status: boolean) {
   sessionStore.update(session => ({
     ...session,
     connectedStatus: status
   }))
 
   await fs.write(
-    webnative.path.file('private', 'connectedStatus'),
+    odd.path.file('private', 'connectedStatus'),
     new TextEncoder().encode(JSON.stringify({ connected: true }))
   )
   await fs.publish()
