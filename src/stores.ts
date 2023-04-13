@@ -1,4 +1,4 @@
-import type * as webnative from 'webnative'
+import type * as odd from '@oddjs/odd'
 import { derived, writable, type Readable, type Writable } from 'svelte/store'
 
 import type { Notification } from '$lib/notifications'
@@ -8,7 +8,7 @@ import type { Session } from '$lib/auth/session'
 import type { Presets } from '$lib/presets'
 import type { Views } from '$lib/views'
 
-export const fileSystemStore: Writable<webnative.FileSystem | null> = writable(null)
+export const fileSystemStore: Writable<odd.FileSystem | null> = writable(null)
 
 export const notificationStore: Writable<Notification[]> = writable([])
 
@@ -26,12 +26,12 @@ export const sessionStore: Writable<Session> = writable({
   session: null
 })
 
-export const programStore: Writable<webnative.Program | null> = writable(null)
+export const programStore: Writable<odd.Program | null> = writable(null)
 
 export const authStore: Readable<{
-  authStrategy: webnative.AuthenticationStrategy | null
+  authStrategy: odd.AuthenticationStrategy | null
   connectedStatus: boolean
-  session: webnative.Session | null
+  session: odd.Session | null
 }> = derived(
   [ programStore, sessionStore ],
   ([ $program, $session ]) => {

@@ -1,4 +1,4 @@
-import * as webnative from 'webnative'
+import * as odd from '@oddjs/odd'
 import { get as getStore } from 'svelte/store'
 
 import { fileSystemStore, patchStore, presetsStore } from '../../stores'
@@ -39,7 +39,7 @@ export const loadFromFilesystem: (visibility: Visibility) => Promise<Patch[]> = 
 
   const data = await Promise.all(links.map(async ([name, _]) =>
     JSON.parse(new TextDecoder().decode(await fs?.read(
-      webnative.path.combine(PRESETS_DIRS[visibility], webnative.path.file(name))
+      odd.path.combine(PRESETS_DIRS[visibility], odd.path.file(name))
     ))) as Patch
   ))
 
@@ -89,11 +89,11 @@ const addOrUpdate = (arr: Patch[], element: Patch): Patch[] => {
  */
 export const savePreset = async (preset: Patch) => {
   const fs = getStore(fileSystemStore)
-  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
+  const contentPath = odd.path.combine(PRESETS_DIRS[preset.visibility], odd.path.file(`${preset?.id}.json`))
 
   // Check for duplicate preset in the opposite directory and remove it
   const oppositeDirectory = preset.visibility === Visibility.private ? Visibility.public : Visibility.private
-  const oppositeContentPath = webnative.path.combine(PRESETS_DIRS[oppositeDirectory], webnative.path.file(`${preset?.id}.json`))
+  const oppositeContentPath = odd.path.combine(PRESETS_DIRS[oppositeDirectory], odd.path.file(`${preset?.id}.json`))
   const exists = await fs?.exists(oppositeContentPath)
   if (exists) {
     await fs?.rm(
@@ -148,7 +148,7 @@ export const saveAllPresets = async (presets: Patch[]) => {
       creator: username
     }
 
-    const contentPath = webnative.path.combine(PRESETS_DIRS[ updatedPreset.visibility ], webnative.path.file(`${updatedPreset?.id}.json`))
+    const contentPath = odd.path.combine(PRESETS_DIRS[ updatedPreset.visibility ], odd.path.file(`${updatedPreset?.id}.json`))
 
     await fs?.write(
       contentPath,
@@ -186,7 +186,7 @@ export const saveAllPresets = async (presets: Patch[]) => {
  */
 export const deletePreset = async (preset: Patch) => {
   const fs = getStore(fileSystemStore)
-  const contentPath = webnative.path.combine(PRESETS_DIRS[preset.visibility], webnative.path.file(`${preset?.id}.json`))
+  const contentPath = odd.path.combine(PRESETS_DIRS[preset.visibility], odd.path.file(`${preset?.id}.json`))
 
   await fs?.rm(contentPath)
 

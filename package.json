@@ -33,8 +33,8 @@
   "dependencies": {
     "@elemaudio/core": "^1.0.8",
     "@elemaudio/plugin-renderer": "1.0.18",
+    "@oddjs/odd": "^0.37.0",
     "clipboard-copy": "^4.0.1",
-    "qrcode-svg": "^1.1.0",
-    "webnative": "^0.36.2"
+    "qrcode-svg": "^1.1.0"
   }
 }

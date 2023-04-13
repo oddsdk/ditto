@@ -1,5 +1,5 @@
 import { get as getStore } from 'svelte/store'
-import * as webnative from 'webnative'
+import * as odd from '@oddjs/odd'
 
 import { getLocalOnlyFs } from './filesystem/local'
 import * as CustomAuth from '$lib/auth'
@@ -16,7 +16,7 @@ export const initialize = async (): Promise<void> => {
       debug: true,
     }
 
-    const program = await webnative.program({
+    const program = await odd.program({
       ...configuration,
       auth: await CustomAuth.implementation(configuration)
     })

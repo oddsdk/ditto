@@ -1,6 +1,6 @@
-import type * as webnative from 'webnative'
+import type * as odd from '@oddjs/odd'
 
 export type Session = {
   connectedStatus: boolean
-  session: webnative.Session | null
+  session: odd.Session | null
 }

@@ -36,7 +36,7 @@
 
   core.initialize()
 
-  // Initialize Webnative
+  // Initialize the ODD SDK
   async function init() {
     loading = true
     await initialize()
@@ -53,7 +53,9 @@
     {#if loading}
       <LoadingSpinner />
     {:else}
-      <div class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b">
+      <div
+        class="grid grid-flow-col auto-cols w-full items-center px-2 pl-5 py-5 backdrop-blur-sm bg-base-100 border-b"
+      >
         <Logo />
         <div class="relative max-w-[500px] flex items-center justify-center">
           <div class="absolute left-[54px]">
@@ -92,7 +94,12 @@
       </div>
     {/if}
     {#if !loading && !$sessionStore.connectedStatus}
-      <div class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace">Presets will only be saved locally until you connect with the Ditto companion app</div>
+      <div
+        class="absolute right-0 bottom-0 left-0 text-center bg-base-300 text-sm py-2 font-monospace"
+      >
+        Presets will only be saved locally until you connect with the Ditto
+        companion app
+      </div>
     {/if}
   </div>
 {/if}
